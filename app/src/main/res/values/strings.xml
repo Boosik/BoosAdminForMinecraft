@@ -1,0 +1,46 @@
+<resources>
+    <string name="app_name">BoosAdminForMinecraft</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="add_server">Add server</string>
+    <string name="port">Port</string>
+    <string name="server_name">Server name</string>
+    <string name="server_ip">Server IP or hostname</string>
+    <string name="query_ip">Query IP or hostname</string>
+    <string name="dynmap_ip">Dynmap IP or hostname</string>
+    <string name="password">Password</string>
+    <string name="save_server">Save server</string>
+    <string name="server_list">Server list</string>
+    <string name="server_commands">Server commands</string>
+    <string name="player_commands">Player commands</string>
+    <string name="plugin_commands">Plugin commands</string>
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_server_control">ServerControlActivity</string>
+
+    <string name="title_section1">Server</string>
+    <string name="title_section2">Players</string>
+    <string name="title_section3">Plugins</string>
+    <string name="title_section4">Dynmap</string>
+
+    <string name="dialog_select">Please select&#32;</string>
+    <string name="dialog_enter">Please enter&#32;</string>
+
+    <string-array name="gamemodes_array">
+        <item>survival</item>
+        <item>creative</item>
+        <item>adventure</item>
+        <item>spectator</item>
+    </string-array>
+
+    <string-array name="time_array">
+        <item>day</item>
+        <item>night</item>
+    </string-array>
+
+    <string-array name="weather_array">
+        <item>clear</item>
+        <item>rain</item>
+        <item>thunder</item>
+    </string-array>
+</resources>
