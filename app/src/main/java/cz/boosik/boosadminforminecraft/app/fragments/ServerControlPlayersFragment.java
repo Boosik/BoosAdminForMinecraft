@@ -38,8 +38,8 @@ public class ServerControlPlayersFragment extends Fragment {
     private static final String ARG_SECTION_NUMBER = "section_number";
     private CommandStorage playerCommands;
     private ArrayAdapter<String> adapter;
-    private List<String> onlinePlayers = new ArrayList<>();
-    private ArrayList<String> commandNamesArrayList = new ArrayList<>();
+    private List<String> onlinePlayers;
+    private ArrayList<String> commandNamesArrayList;
 
     public static ServerControlPlayersFragment newInstance(int sectionNumber) {
         ServerControlPlayersFragment fragment = new ServerControlPlayersFragment();
@@ -61,6 +61,7 @@ public class ServerControlPlayersFragment extends Fragment {
     }
 
     private void prepareOnlineList() {
+        onlinePlayers = new ArrayList<>();
         adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, onlinePlayers);
         lv.setAdapter(adapter);
         updateOnlinePlayers();
@@ -68,6 +69,7 @@ public class ServerControlPlayersFragment extends Fragment {
 
     private void preparePlayerCommands() {
         playerCommands = new CommandStorage();
+        commandNamesArrayList = new ArrayList<>();
         ArrayList<Command> commandArrayList = new ArrayList<>();
         for (PlayerCommands bc : PlayerCommands.values()) {
             commandArrayList.add(new Command(bc.name().toLowerCase().replace("_", " "), bc.getCommandString()));

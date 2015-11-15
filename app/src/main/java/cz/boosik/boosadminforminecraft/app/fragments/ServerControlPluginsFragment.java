@@ -41,8 +41,8 @@ public class ServerControlPluginsFragment extends Fragment {
     private CommandStorage supportedPlugins;
     private ArrayAdapter<String> adapter;
     private List<String> plugins = new ArrayList<>();
-    private ArrayList<String> supportedPluginsNames = new ArrayList<>();
-    private HashMap<String, List<String>> pluginMap = new HashMap<>();
+    private ArrayList<String> supportedPluginsNames;
+    private HashMap<String, List<String>> pluginMap;
 
     public static ServerControlPluginsFragment newInstance(int sectionNumber) {
         ServerControlPluginsFragment fragment = new ServerControlPluginsFragment();
@@ -71,6 +71,8 @@ public class ServerControlPluginsFragment extends Fragment {
 
     private void preparePluginCommands() {
         supportedPlugins = new CommandStorage();
+        supportedPluginsNames = new ArrayList<>();
+        pluginMap = new HashMap<>();
         ArrayList<Command> pluginArrayList = new ArrayList<>();
         for (PluginCommands bc : PluginCommands.values()) {
             pluginArrayList.add(new Command(bc.name().toLowerCase().replace("_", "-"), bc.getCommandString()));
