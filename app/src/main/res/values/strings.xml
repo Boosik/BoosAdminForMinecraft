@@ -8,6 +8,8 @@
     <string name="server_list">Server list</string>
     <string name="server_list_hint">To delete a server use a long-press.</string>
     <string name="no_servers_added">No servers have been added. Please add a server from the menu at the top.</string>
+    <string name="rcon_error">Error: cannot connect to RCON, is the server online?</string>
+    <string name="query_error">Error: cannot connect to Query, is the server online?</string>
 
     <!-- Server add -->
     <string name="add_server">Add a new server</string>

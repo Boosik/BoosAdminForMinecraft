@@ -17,7 +17,7 @@ public class MCQuery {
     int localPort = 25566; // the local port we're connected to the server on
 
     private DatagramSocket socket = null; //prevent socket already bound exception
-    private int token;
+    private Integer token;
 
     public MCQuery() {
     } // for testing, defaults to "localhost:25565"
@@ -41,7 +41,11 @@ public class MCQuery {
         byte[] input = ByteUtils.padArrayEnd(req.toBytes(), val);
         byte[] result = sendUDP(input);
 
-        token = Integer.parseInt(new String(result).trim());
+        if (result == null) {
+            token = null;
+        } else {
+            token = Integer.parseInt(new String(result).trim());
+        }
     }
 
     /**
@@ -50,7 +54,12 @@ public class MCQuery {
      * @return a <code>QueryResponse</code> object
      */
     public QueryResponse basicStat() {
+
         handshake(); //get the session token first
+
+        if (token == null) {
+            return null;
+        }
 
         QueryRequest req = new QueryRequest(); //create a request
         req.type = STAT;
@@ -76,6 +85,10 @@ public class MCQuery {
 
         handshake();
 
+        if (token == null) {
+            return null;
+        }
+
         QueryRequest req = new QueryRequest();
         req.type = STAT;
         req.sessionID = generateSessionID();
@@ -90,8 +103,7 @@ public class MCQuery {
          * note: buffer size = base + #players(online) * 16(max username length)
 		 */
 
-        QueryResponse res = new QueryResponse(result, true);
-        return res;
+        return new QueryResponse(result, true);
     }
 
     private byte[] sendUDP(byte[] input) {
@@ -112,7 +124,7 @@ public class MCQuery {
             //receive a response in a new packet
             byte[] out = new byte[4096]; //TODO guess at max size
             DatagramPacket packet = new DatagramPacket(out, out.length);
-            socket.setSoTimeout(5000); //five seconds timeout
+            socket.setSoTimeout(1000); //five seconds timeout
             socket.receive(packet);
 
             return packet.getData();

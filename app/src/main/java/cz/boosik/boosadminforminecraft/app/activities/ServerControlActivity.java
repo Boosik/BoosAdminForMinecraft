@@ -65,7 +65,6 @@ public class ServerControlActivity extends AppCompatActivity implements ActionBa
         } catch (Exception e) {
             e.printStackTrace();
         }
-        checkServer();
 
         int tempCount = mSectionsPagerAdapter.getCount();
         if (!dynmapAvailable) {
@@ -99,11 +98,6 @@ public class ServerControlActivity extends AppCompatActivity implements ActionBa
     public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
     }
 
-    private void checkServer() {
-        new ExecuteCommandTask(this, null, null).execute("list");
-        new LoadOnlinePlayersTask(null,this).execute();
-    }
-
     private void prepareSessionData(String serverName) {
         StorageProvider storageProvider = new StorageProvider(this, "servers.json");
         try {
@@ -118,13 +112,6 @@ public class ServerControlActivity extends AppCompatActivity implements ActionBa
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-    }
-
-    public void invokeError(String type) {
-        Intent i = new Intent(this, ServerListActivity.class);
-        i.putExtra("error", type);
-        startActivity(i);
-        finish();
     }
 
     public boolean isDynmapAvailable() {

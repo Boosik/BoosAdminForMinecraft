@@ -19,6 +19,9 @@ import butterknife.OnItemLongClick;
 import cz.boosik.boosadminforminecraft.app.R;
 import cz.boosik.boosadminforminecraft.app.activities.ServerControlActivity;
 import cz.boosik.boosadminforminecraft.app.activities.ServerListActivity;
+import cz.boosik.boosadminforminecraft.app.asyncTasks.ExecuteCommandTask;
+import cz.boosik.boosadminforminecraft.app.asyncTasks.LoadOnlinePlayersTask;
+import cz.boosik.boosadminforminecraft.app.query.MCQuery;
 import cz.boosik.boosadminforminecraft.app.serverStore.Server;
 import cz.boosik.boosadminforminecraft.app.serverStore.ServerStorage;
 import cz.boosik.boosadminforminecraft.app.serverStore.StorageProvider;
@@ -87,9 +90,17 @@ public class ServerListFragment extends Fragment {
     @OnItemClick(R.id.server_list)
     public void onItemClick(int position) {
         String choice = (String) lv.getItemAtPosition(position);
-        Intent i = new Intent(getActivity(), ServerControlActivity.class);
-        i.putExtra("serverName", choice);
-        startActivity(i);
+        Server server = servers.get(position);
+        MCQuery mcQuery = null;
+        try {
+            mcQuery = new MCQuery(server.getQueryHost(), Integer.valueOf(server.getQueryPort()));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        ((ServerListActivity)getActivity()).setSelected(choice);
+        ((ServerListActivity)getActivity()).setMcQuery(mcQuery);
+        ((ServerListActivity)getActivity()).checkRcon(server);
+
     }
 
     @OnItemLongClick(R.id.server_list)

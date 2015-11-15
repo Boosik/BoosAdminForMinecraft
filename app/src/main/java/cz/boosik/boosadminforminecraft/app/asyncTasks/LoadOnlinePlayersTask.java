@@ -1,10 +1,15 @@
 package cz.boosik.boosadminforminecraft.app.asyncTasks;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.design.widget.Snackbar;
+import android.view.View;
+import cz.boosik.boosadminforminecraft.app.R;
 import cz.boosik.boosadminforminecraft.app.activities.ServerControlActivity;
 import cz.boosik.boosadminforminecraft.app.activities.ServerListActivity;
 import cz.boosik.boosadminforminecraft.app.fragments.ServerControlPlayersFragment;
+import cz.boosik.boosadminforminecraft.app.fragments.ServerListFragment;
 import cz.boosik.boosadminforminecraft.app.query.QueryResponse;
 
 /**
@@ -13,18 +18,28 @@ import cz.boosik.boosadminforminecraft.app.query.QueryResponse;
 public class LoadOnlinePlayersTask extends AsyncTask<Void, Void, QueryResponse> {
 
     ServerControlPlayersFragment fragment;
-    ServerControlActivity activity;
+    Context context;
 
-    public LoadOnlinePlayersTask(ServerControlPlayersFragment fragment, ServerControlActivity activity) {
+    public LoadOnlinePlayersTask(ServerControlPlayersFragment fragment, Context context) {
         this.fragment = fragment;
-        this.activity = activity;
+        this.context = context;
+    }
+
+    public LoadOnlinePlayersTask(Context context) {
+        this.context = context;
     }
 
     @Override
     protected QueryResponse doInBackground(Void... params) {
         try {
-            if (activity == null) activity = (ServerControlActivity) fragment.getActivity();
-            return activity.getMcQuery().fullStat();
+            if (context == null) {
+                context = fragment.getActivity();
+            }
+            if (context instanceof ServerListActivity) {
+                return ((ServerListActivity)context).getMcQuery().fullStat();
+            } else {
+                return ((ServerControlActivity)context).getMcQuery().fullStat();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -33,11 +48,24 @@ public class LoadOnlinePlayersTask extends AsyncTask<Void, Void, QueryResponse> 
 
     @Override
     protected void onPostExecute(QueryResponse response) {
-        if (activity == null) activity = (ServerControlActivity) fragment.getActivity();
+
+        if (context instanceof ServerListActivity) {
+            if (response == null) {
+                ((ServerListActivity) context).invokeError("query");
+                return;
+            } else {
+                ((ServerListActivity) context).connect();
+                return;
+            }
+        }
+
         if (response == null) {
-            activity.invokeError("query");
+            Intent i = new Intent(context, ServerListActivity.class);
+            i.putExtra("error", "rcon");
+            context.startActivity(i);
             return;
         }
+
         if (fragment != null) {
             fragment.getOnlinePlayers().clear();
             fragment.getOnlinePlayers().addAll(response.getPlayerList());

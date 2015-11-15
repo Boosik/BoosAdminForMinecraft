@@ -6,7 +6,9 @@ package com.google.rconclient.rcon;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.net.SocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.charset.Charset;
@@ -73,7 +75,9 @@ public class RCon {
         super();
         final Random random = new Random();
         requestId = random.nextInt();
-        socket = new Socket(host, port);
+        socket = new Socket();
+        InetSocketAddress adress = new InetSocketAddress(host,port);
+        socket.connect(adress,1000);
         outputStream = socket.getOutputStream();
         inputStream = socket.getInputStream();
         final byte[] passwordBytes = new byte[password.length];
@@ -131,7 +135,7 @@ public class RCon {
      */
     private byte[] send(final int type, final byte[] payload) throws IOException, IncorrectRequestIdException {
         final byte[] receivedPayload;
-        synchronized (syncObject) {
+//        synchronized (syncObject) {
             // Send the command.
             final int sendLength = 4 + 4 + payload.length + 2;
             final byte[] sendBytes = new byte[4 + sendLength];
@@ -161,7 +165,7 @@ public class RCon {
                 final IncorrectRequestIdException exception = new IncorrectRequestIdException(receivedRequestId);
                 throw exception;
             }
-        }
+//        }
         return receivedPayload;
     }
 
