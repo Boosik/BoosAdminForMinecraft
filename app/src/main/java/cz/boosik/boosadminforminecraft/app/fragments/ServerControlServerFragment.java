@@ -1,12 +1,7 @@
 package cz.boosik.boosadminforminecraft.app.fragments;
 
-/**
- * @author jakub.kolar@bsc-ideas.com
- */
-
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatSpinner;
@@ -19,6 +14,8 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnItemClick;
 import cz.boosik.boosadminforminecraft.app.R;
+import cz.boosik.boosadminforminecraft.app.activities.ServerControlActivity;
+import cz.boosik.boosadminforminecraft.app.asyncTasks.ExecuteCommandTask;
 import cz.boosik.boosadminforminecraft.app.commands.BaseCommands;
 import cz.boosik.boosadminforminecraft.app.commands.Command;
 import cz.boosik.boosadminforminecraft.app.commands.CommandStorage;
@@ -27,33 +24,24 @@ import cz.boosik.boosadminforminecraft.app.components.CustomNumberPicker;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * @author jakub.kolar@bsc-ideas.com
+ */
 public class ServerControlServerFragment extends Fragment {
-    /**
-     * The fragment argument representing the section number for this
-     * fragment.
-     */
-    private static final String ARG_SECTION_NUMBER = "section_number";
 
     @Bind(R.id.server_command_list)
     ListView lv;
 
-    CommandStorage baseCommands;
+    private static final String ARG_SECTION_NUMBER = "section_number";
+    private CommandStorage baseCommands;
     private ArrayAdapter<String> adapter;
 
-
-    /**
-     * Returns a new instance of this fragment for the given section
-     * number.
-     */
     public static ServerControlServerFragment newInstance(int sectionNumber) {
         ServerControlServerFragment fragment = new ServerControlServerFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
         fragment.setArguments(args);
         return fragment;
-    }
-
-    public ServerControlServerFragment() {
     }
 
     @Override
@@ -69,20 +57,15 @@ public class ServerControlServerFragment extends Fragment {
         baseCommands = new CommandStorage();
         ArrayList<Command> commandArrayList = new ArrayList<>();
         ArrayList<String> commandNamesArrayList = new ArrayList<>();
-
+        commandArrayList.add(0, new Command(getString(R.string.custom_command), "<custom_command>"));
         for (BaseCommands bc : BaseCommands.values()) {
             commandArrayList.add(new Command(bc.name().toLowerCase().replace("_", " "), bc.getCommandString()));
         }
         baseCommands.setCommands(commandArrayList);
-
         for (Command command : commandArrayList) {
             commandNamesArrayList.add(command.getName());
         }
-
         adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, commandNamesArrayList);
-
-//        ServersAdapter adapter = new ServersAdapter(getActivity(),serverStore.getServers());
-
         lv.setAdapter(adapter);
     }
 
@@ -101,8 +84,16 @@ public class ServerControlServerFragment extends Fragment {
             prepareSpinnerDialog(commandString, "<time>", R.string.dialog_select, R.array.time_array);
         } else if (commandString.contains("<weather>")) {
             prepareSpinnerDialog(commandString, "<weather>", R.string.dialog_select, R.array.weather_array);
-        } else if (commandString.contains("<timeNumber>")) {
-            prepareEditTextDialog(commandString, "<timeNumber>", R.string.dialog_enter, true);
+        } else if (commandString.contains("<time_number>")) {
+            prepareEditTextDialog(commandString, "<time_number>", R.string.dialog_enter, true);
+        } else if (commandString.contains("<custom_command>")) {
+            prepareEditTextDialog(commandString, "<custom_command>", R.string.dialog_enter, false);
+        } else if (commandString.contains("<ip>")) {
+            prepareEditTextDialog(commandString, "<ip>", R.string.dialog_enter, false);
+        } else if (commandString.contains("<player>")) {
+            prepareEditTextDialog(commandString, "<player>", R.string.dialog_enter, false);
+        } else {
+            new ExecuteCommandTask((ServerControlActivity) getActivity(), getView(), ((ServerControlActivity) getActivity()).getClickListener()).execute(commandString);
         }
     }
 
@@ -112,11 +103,11 @@ public class ServerControlServerFragment extends Fragment {
         new AlertDialog.Builder(getActivity())
                 .setView(dialogView)
                 .setTitle(commandString)
-                .setMessage(getString(R.string.dialog_select)+"<page>")
+                .setMessage(getString(R.string.dialog_select) + " " + "<page>")
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         CustomNumberPicker page = (CustomNumberPicker) dialogView.findViewById(R.id.page);
-                        Snackbar.make(getView(), commandString.replace("<page>", String.valueOf(page.getValue())), Snackbar.LENGTH_SHORT).show();
+                        new ExecuteCommandTask((ServerControlActivity) getActivity(), getView(), ((ServerControlActivity) getActivity()).getClickListener()).execute(commandString.replace("<page>", String.valueOf(page.getValue())));
                     }
                 })
                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
@@ -139,11 +130,11 @@ public class ServerControlServerFragment extends Fragment {
         new AlertDialog.Builder(getActivity())
                 .setView(dialogView)
                 .setTitle(commandString)
-                .setMessage(getString(messageId)+replacable)
+                .setMessage(getString(messageId) + " " + replacable)
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         EditText editText = (EditText) dialogView.findViewById(R.id.editTextDialog);
-                        Snackbar.make(getView(), commandString.replace(replacable, editText.getText().toString()), Snackbar.LENGTH_SHORT).show();
+                        new ExecuteCommandTask((ServerControlActivity) getActivity(), getView(), ((ServerControlActivity) getActivity()).getClickListener()).execute(commandString.replace(replacable, editText.getText().toString()));
                     }
                 })
                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
@@ -164,11 +155,11 @@ public class ServerControlServerFragment extends Fragment {
         new AlertDialog.Builder(getActivity())
                 .setView(dialogView)
                 .setTitle(commandString)
-                .setMessage(getString(messageId)+replacable)
+                .setMessage(getString(messageId) + " " + replacable)
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         AppCompatSpinner spinner = (AppCompatSpinner) dialogView.findViewById(R.id.spinnerDialog);
-                        Snackbar.make(getView(), commandString.replace(replacable, spinner.getSelectedItem().toString()), Snackbar.LENGTH_SHORT).show();
+                        new ExecuteCommandTask((ServerControlActivity) getActivity(), getView(), ((ServerControlActivity) getActivity()).getClickListener()).execute(commandString.replace(replacable, spinner.getSelectedItem().toString()));
                     }
                 })
                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {

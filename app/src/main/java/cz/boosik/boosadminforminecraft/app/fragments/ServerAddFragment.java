@@ -20,7 +20,7 @@ import cz.boosik.boosadminforminecraft.app.serverStore.Server;
 import cz.boosik.boosadminforminecraft.app.serverStore.StorageProvider;
 
 /**
- * A simple {@link Fragment} subclass.
+ * @author jakub.kolar@bsc-ideas.com
  */
 public class ServerAddFragment extends Fragment {
 
@@ -43,11 +43,6 @@ public class ServerAddFragment extends Fragment {
     @Bind(R.id.btSave)
     Button btSave;
 
-
-    public ServerAddFragment() {
-        // Required empty public constructor
-    }
-
     @OnClick(R.id.btSave)
     public void saveServer() {
         String serverName = etServerName.getText().toString();
@@ -58,15 +53,13 @@ public class ServerAddFragment extends Fragment {
         String queryHost = etQueryHost.getText().toString();
         String queryPort = etQueryPort.getText().toString();
         String password = etPassword.getText().toString();
-
         StorageProvider storageProvider = new StorageProvider(getActivity(), "servers.json");
         try {
             if (storageProvider.saveServer(new Server(serverName, serverHost, serverPort, password, queryHost, queryPort, dynmapHost, dynmapPort))) {
-                Snackbar.make(getView(), getString(R.string.add_server), Snackbar.LENGTH_SHORT).show();
                 Intent i = new Intent(getActivity(), ServerListActivity.class);
                 startActivity(i);
             } else {
-    //            Toast.makeText(this, R.string.error_duplicate_server_name, Toast.LENGTH_SHORT).show();
+                Snackbar.make(getView(), getString(R.string.duplicate), Snackbar.LENGTH_LONG).show();
             }
         } catch (Exception e) {
 
@@ -78,9 +71,6 @@ public class ServerAddFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_server_add, container, false);
         ButterKnife.bind(this, view);
-        getActivity().setTitle(getString(R.string.add_server));
         return view;
     }
-
-
 }

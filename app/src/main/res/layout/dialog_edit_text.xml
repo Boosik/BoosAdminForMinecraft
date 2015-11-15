@@ -2,7 +2,5 @@
 <EditText xmlns:android="http://schemas.android.com/apk/res/android"
           android:layout_width="match_parent"
           android:layout_height="match_parent"
-          android:id="@+id/editTextDialog"
-          android:paddingLeft="15dp"
-          android:paddingRight="15dp">
+          android:id="@+id/editTextDialog">
 </EditText>

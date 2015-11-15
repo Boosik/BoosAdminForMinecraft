@@ -83,8 +83,4 @@ public class StorageProvider {
         servers = new Gson().fromJson(contents, ServerStorage.class);
         return servers;
     }
-
-    public boolean clearStorage() {
-        return activity.deleteFile(fileName);
-    }
 }

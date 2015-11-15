@@ -3,8 +3,6 @@
           android:layout_width="match_parent"
           android:layout_height="match_parent"
           android:inputType="number"
-          android:id="@+id/numberDialog"
-          android:paddingLeft="15dp"
-          android:paddingRight="15dp">
+          android:id="@+id/numberDialog">
 
 </EditText>

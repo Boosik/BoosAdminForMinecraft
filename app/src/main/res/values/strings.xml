@@ -1,11 +1,11 @@
 <resources>
-    <string name="app_name">BoosAdminForMinecraft</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
-    <string name="add_server">Add server</string>
+    <string name="app_name">boosAdmin For Minecraft</string>
+    <string name="add_server">Add a new server</string>
     <string name="port">Port</string>
+    <string name="dynmap_port">Port*</string>
     <string name="server_name">Server name</string>
-    <string name="server_ip">Server IP or hostname</string>
+    <string name="dynmap_port_hint">*if you use dynmap host without port leave this field empty</string>
+    <string name="server_ip">RCON IP or hostname</string>
     <string name="query_ip">Query IP or hostname</string>
     <string name="dynmap_ip">Dynmap IP or hostname</string>
     <string name="password">Password</string>
@@ -14,7 +14,19 @@
     <string name="server_commands">Server commands</string>
     <string name="player_commands">Player commands</string>
     <string name="plugin_commands">Plugin commands</string>
-<!-- TODO: Remove or change this placeholder text -->
+    <string name="online_players">Online players</string>
+    <string name="custom_command">custom command</string>
+    <string name="supported_plugins">Supported plugins</string>
+    <string name="optional">Optional information</string>
+    <string name="mandatory">Mandatory information</string>
+    <string name="duplicate">Error: duplicate server name!</string>
+    <string name="server_list_hint">To delete a server use a long-press.</string>
+    <string name="no_servers_added">No servers have been added. Please add a server from the menu at the top.</string>
+
+    <string name="ok">OK</string>
+    <string name="authenticate_error">Error: Unable to authenticate on the server. Check your RCON host, port and password!</string>
+    <string name="no_response">Command was successfully executed!</string>
+
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_server_control">ServerControlActivity</string>
 
@@ -23,8 +35,10 @@
     <string name="title_section3">Plugins</string>
     <string name="title_section4">Dynmap</string>
 
-    <string name="dialog_select">Please select&#32;</string>
-    <string name="dialog_enter">Please enter&#32;</string>
+
+    <string name="dialog_select">Please select</string>
+    <string name="dialog_enter">Please enter</string>
+    <string name="dialog_player">Please select command and enter additional parameters if applicable</string>
 
     <string-array name="gamemodes_array">
         <item>survival</item>

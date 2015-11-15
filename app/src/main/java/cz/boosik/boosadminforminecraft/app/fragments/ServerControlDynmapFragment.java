@@ -18,19 +18,12 @@ import cz.boosik.boosadminforminecraft.app.activities.ServerControlActivity;
  * @author jakub.kolar@bsc-ideas.com
  */
 public class ServerControlDynmapFragment extends Fragment {
-    /**
-     * The fragment argument representing the section number for this
-     * fragment.
-     */
-    private static final String ARG_SECTION_NUMBER = "section_number";
 
     @Bind(R.id.wvDynmap)
     WebView wvDynmap;
 
-    /**
-     * Returns a new instance of this fragment for the given section
-     * number.
-     */
+    static final String ARG_SECTION_NUMBER = "section_number";
+
     public static ServerControlDynmapFragment newInstance(int sectionNumber) {
         ServerControlDynmapFragment fragment = new ServerControlDynmapFragment();
         Bundle args = new Bundle();
@@ -39,15 +32,12 @@ public class ServerControlDynmapFragment extends Fragment {
         return fragment;
     }
 
-    public ServerControlDynmapFragment() {
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_server_control_dynmap, container, false);
         ButterKnife.bind(this, rootView);
-        if (ServerControlActivity.dynmapAvailable) {
+        if (((ServerControlActivity) getActivity()).isDynmapAvailable()) {
             wvDynmap.setWebChromeClient(new WebChromeClient());
             wvDynmap.setWebViewClient(new WebViewClient());
             wvDynmap.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
@@ -68,10 +58,10 @@ public class ServerControlDynmapFragment extends Fragment {
 
     private String buildUrl() {
         String url;
-        if (ServerControlActivity.server.getDynmapPort().isEmpty()) {
-            url = ServerControlActivity.server.getDynmapHost();
+        if (((ServerControlActivity) getActivity()).getServer().getDynmapPort().isEmpty()) {
+            url = ((ServerControlActivity) getActivity()).getServer().getDynmapHost();
         } else {
-            url = ServerControlActivity.server.getDynmapHost() + ":" + ServerControlActivity.server.getDynmapPort();
+            url = ((ServerControlActivity) getActivity()).getServer().getDynmapHost() + ":" + ((ServerControlActivity) getActivity()).getServer().getDynmapPort();
         }
         if (url.startsWith("https://")) url = url.replace("https://", "http://");
         if (!url.startsWith("http://")) url = "http://" + url;

@@ -10,7 +10,7 @@
             style="?android:attr/listSeparatorTextViewStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/online_players"/>
+            android:text="@string/supported_plugins"/>
 
     <android.support.v4.widget.SwipeRefreshLayout
             xmlns:android="http://schemas.android.com/apk/res/android"
@@ -18,7 +18,7 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:orientation="vertical"
-            android:id="@+id/players_refresher">
+            android:id="@+id/plugins_refresher">
 
         <ListView
                 android:id="@+id/player_command_list"

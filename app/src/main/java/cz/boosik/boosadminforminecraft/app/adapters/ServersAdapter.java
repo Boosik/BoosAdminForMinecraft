@@ -23,7 +23,7 @@ public class ServersAdapter extends RecyclerView.Adapter<ServersAdapter.ViewHold
     private List<Server> servers;
     private Context context;
 
-    public ServersAdapter(Context context,List<Server> servers) {
+    public ServersAdapter(Context context, List<Server> servers) {
         this.servers = servers;
         this.context = context;
     }
@@ -39,18 +39,12 @@ public class ServersAdapter extends RecyclerView.Adapter<ServersAdapter.ViewHold
             ButterKnife.bind(this, itemView);
         }
 
-        //        @OnClick(R.id.server_name_list)
-//    public void onItemClick(int position) {
-//                Intent i = new Intent(getActivity(), ServerControlActivity.class);
-//                i.putExtra("serverName", position);
-//                startActivity(i);
-//    }
         @Override
         public void onClick(View view) {
-            int position = getLayoutPosition(); // gets item position
+            int position = getLayoutPosition();
             Intent i = new Intent(context, ServerControlActivity.class);
-                i.putExtra("serverName", position);
-                context.startActivity(i);
+            i.putExtra("serverName", position);
+            context.startActivity(i);
         }
     }
 

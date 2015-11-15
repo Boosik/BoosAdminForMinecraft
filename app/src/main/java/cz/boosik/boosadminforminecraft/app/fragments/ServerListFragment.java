@@ -4,19 +4,21 @@ import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnItemClick;
 import butterknife.OnItemLongClick;
 import cz.boosik.boosadminforminecraft.app.R;
-import cz.boosik.boosadminforminecraft.app.activities.ServerAddActivity;
 import cz.boosik.boosadminforminecraft.app.activities.ServerControlActivity;
+import cz.boosik.boosadminforminecraft.app.activities.ServerListActivity;
 import cz.boosik.boosadminforminecraft.app.serverStore.Server;
 import cz.boosik.boosadminforminecraft.app.serverStore.ServerStorage;
 import cz.boosik.boosadminforminecraft.app.serverStore.StorageProvider;
@@ -27,21 +29,22 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 /**
- * A placeholder fragment containing a simple view.
+ * @author jakub.kolar@bsc-ideas.com
  */
 public class ServerListFragment extends Fragment {
 
     @Bind(R.id.server_list)
     ListView lv;
+    @Bind(R.id.no_servers_added)
+    TextView tv;
+    @Bind(R.id.server_list_header)
+    TextView tv2;
 
-    StorageProvider storageProvider;
+    private StorageProvider storageProvider;
     private ServerStorage serverStore;
     private ArrayAdapter<String> adapter;
     private ArrayList<Server> servers;
     private LinkedList<String> srvs = new LinkedList<String>();
-
-    public ServerListFragment() {
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -52,25 +55,32 @@ public class ServerListFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (servers != null) {
+            ((ServerListActivity) getActivity()).setSnackbar(Snackbar
+                    .make(getView(), R.string.server_list_hint, Snackbar.LENGTH_LONG)
+                    .setAction(R.string.ok, ((ServerListActivity) getActivity()).getClickListener()));
+            ((ServerListActivity) getActivity()).getSnackbar().show();
+        }
+    }
+
     private void prepareServerList() {
         storageProvider = new StorageProvider(getActivity(), "servers.json");
-
         try {
             serverStore = storageProvider.readServers();
         } catch (FileNotFoundException e) {
-            Intent i = new Intent(getActivity(), ServerAddActivity.class);
-            startActivity(i);
+            lv.setVisibility(View.GONE);
+            tv.setVisibility(View.VISIBLE);
+            tv2.setVisibility(View.GONE);
             return;
         }
         servers = serverStore.getServers();
         for (Server server : servers) {
             srvs.add(server.getName());
         }
-
         adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, srvs);
-
-//        ServersAdapter adapter = new ServersAdapter(getActivity(),serverStore.getServers());
-
         lv.setAdapter(adapter);
     }
 
