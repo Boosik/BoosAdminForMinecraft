@@ -1,0 +1,44 @@
+<resources>
+
+    <!-- Global -->
+    <string name="app_name">boosAdmin For Minecraft</string>
+    <string name="ok">OK</string>
+
+    <!-- Server list -->
+    <string name="server_list">Seznam serverů</string>
+    <string name="server_list_hint">Pro odstranění serveru použijte dlouhé stisknutí.</string>
+    <string name="no_servers_added">Žádné servery nebyly přidány. Prosím přidejte server pomocí horní nabídky.</string>
+
+    <!-- Server add -->
+    <string name="add_server">Přidat nový server</string>
+    <string name="port">Port</string>
+    <string name="dynmap_port">Port*</string>
+    <string name="server_name">Název serveru</string>
+    <string name="server_ip">RCON IP nebo adresa</string>
+    <string name="query_ip">Query IP nebo adresa</string>
+    <string name="dynmap_ip">Dynmap IP nebo adresa</string>
+    <string name="password">Heslo</string>
+    <string name="dynmap_port_hint">*pokud používáte adresu dynmapy bez portu, ponechte toto pole prázdné</string>
+    <string name="save_server">Uložit server</string>
+    <string name="optional">Volitelné informace</string>
+    <string name="mandatory">Povinné informace</string>
+    <string name="duplicate">Chyba: server s tímto názvem již existuje!</string>
+
+    <!-- Server control -->
+    <string name="server_commands">Serverové příkazy</string>
+    <string name="player_commands">Příkazy hráčů</string>
+    <string name="plugin_commands">Příkazy pluginů</string>
+    <string name="online_players">Online hráči</string>
+    <string name="custom_command">vlastní příkaz</string>
+    <string name="supported_plugins">Podporované pluginy</string>
+    <string name="authenticate_error">Chyba: Nelze se přihlásit k serveru! Zkontorlujte RCON IP/adresu, port and heslo!</string>
+    <string name="no_response">Command was successfully executed!</string>
+    <string name="title_section1">Server</string>
+    <string name="title_section2">Hráči</string>
+    <string name="title_section3">Pluginy</string>
+    <string name="title_section4">Dynmapa</string>
+    <string name="dialog_select">Zvolte</string>
+    <string name="dialog_enter">Zadejte</string>
+    <string name="dialog_player">Zvolte příkaz a zadejte případné další parametry</string>
+
+</resources>

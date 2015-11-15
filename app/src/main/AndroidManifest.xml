@@ -28,7 +28,7 @@
         </activity>
         <activity
             android:name=".activities.ServerControlActivity"
-            android:label="@string/title_activity_server_control"
+            android:label="@string/app_name"
             android:parentActivityName=".activities.ServerListActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
