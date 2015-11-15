@@ -1,5 +1,6 @@
 package cz.boosik.boosadminforminecraft.app.asyncTasks;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.design.widget.Snackbar;
 import android.view.View;
@@ -7,6 +8,7 @@ import com.google.rconclient.rcon.AuthenticationException;
 import com.google.rconclient.rcon.RCon;
 import cz.boosik.boosadminforminecraft.app.R;
 import cz.boosik.boosadminforminecraft.app.activities.ServerControlActivity;
+import cz.boosik.boosadminforminecraft.app.activities.ServerListActivity;
 import cz.boosik.boosadminforminecraft.app.serverStore.Server;
 
 import java.io.IOException;
@@ -47,24 +49,23 @@ public class ExecuteCommandTask extends AsyncTask<String, Void, String> {
     protected void onPostExecute(String result) {
 
         if (result == null) {
-            activity.setSnackbar(Snackbar
-                    .make(view, R.string.authenticate_error, Snackbar.LENGTH_INDEFINITE)
-                    .setAction(R.string.ok, listener));
-            activity.getSnackbar().show();
+            activity.invokeError("rcon");
             return;
         }
 
-        if (result.isEmpty()) {
+        if (view != null) {
+            if (result.isEmpty()) {
+                activity.setSnackbar(Snackbar
+                        .make(view, R.string.no_response, Snackbar.LENGTH_INDEFINITE)
+                        .setAction(R.string.ok, listener));
+                activity.getSnackbar().show();
+                return;
+            }
+            result = result.replaceAll("��.", "");
             activity.setSnackbar(Snackbar
-                    .make(view, R.string.no_response, Snackbar.LENGTH_INDEFINITE)
+                    .make(view, result, Snackbar.LENGTH_INDEFINITE)
                     .setAction(R.string.ok, listener));
             activity.getSnackbar().show();
-            return;
         }
-        result = result.replaceAll("��.", "");
-        activity.setSnackbar(Snackbar
-                .make(view, result, Snackbar.LENGTH_INDEFINITE)
-                .setAction(R.string.ok, listener));
-        activity.getSnackbar().show();
     }
 }

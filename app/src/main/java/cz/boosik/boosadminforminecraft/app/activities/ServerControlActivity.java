@@ -2,6 +2,7 @@ package cz.boosik.boosadminforminecraft.app.activities;
 
 import java.io.FileNotFoundException;
 
+import android.content.Intent;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.ActionBar;
@@ -14,6 +15,8 @@ import butterknife.ButterKnife;
 import com.google.rconclient.rcon.RCon;
 import cz.boosik.boosadminforminecraft.app.R;
 import cz.boosik.boosadminforminecraft.app.adapters.SectionsPagerAdapter;
+import cz.boosik.boosadminforminecraft.app.asyncTasks.ExecuteCommandTask;
+import cz.boosik.boosadminforminecraft.app.asyncTasks.LoadOnlinePlayersTask;
 import cz.boosik.boosadminforminecraft.app.components.CustomViewPager;
 import cz.boosik.boosadminforminecraft.app.serverStore.Server;
 import cz.boosik.boosadminforminecraft.app.serverStore.StorageProvider;
@@ -62,6 +65,8 @@ public class ServerControlActivity extends AppCompatActivity implements ActionBa
         } catch (Exception e) {
             e.printStackTrace();
         }
+        checkServer();
+
         int tempCount = mSectionsPagerAdapter.getCount();
         if (!dynmapAvailable) {
             tempCount = 3;
@@ -94,6 +99,11 @@ public class ServerControlActivity extends AppCompatActivity implements ActionBa
     public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
     }
 
+    private void checkServer() {
+        new ExecuteCommandTask(this, null, null).execute("list");
+        new LoadOnlinePlayersTask(null,this).execute();
+    }
+
     private void prepareSessionData(String serverName) {
         StorageProvider storageProvider = new StorageProvider(this, "servers.json");
         try {
@@ -108,6 +118,13 @@ public class ServerControlActivity extends AppCompatActivity implements ActionBa
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+    }
+
+    public void invokeError(String type) {
+        Intent i = new Intent(this, ServerListActivity.class);
+        i.putExtra("error", type);
+        startActivity(i);
+        finish();
     }
 
     public boolean isDynmapAvailable() {

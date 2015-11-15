@@ -111,7 +111,7 @@ public class ServerControlPlayersFragment extends Fragment {
     }
 
     private void updateOnlinePlayers() {
-        new LoadOnlinePlayersTask(this).execute();
+        new LoadOnlinePlayersTask(this,null).execute();
     }
 
     @OnItemClick(R.id.player_command_list)

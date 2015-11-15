@@ -8,6 +8,8 @@
             android:id="@+id/wvDynmap"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#00FFFFFF" />
+            android:background="#00FFFFFF"
+            android:focusable="true"
+            android:focusableInTouchMode="true"/>
 
 </RelativeLayout>

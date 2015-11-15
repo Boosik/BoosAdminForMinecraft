@@ -40,18 +40,12 @@ public class ServerControlDynmapFragment extends Fragment {
         if (((ServerControlActivity) getActivity()).isDynmapAvailable()) {
             wvDynmap.setWebChromeClient(new WebChromeClient());
             wvDynmap.setWebViewClient(new WebViewClient());
-            wvDynmap.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
             WebSettings settings = wvDynmap.getSettings();
             settings.setAllowUniversalAccessFromFileURLs(true);
             settings.setJavaScriptEnabled(true);
-            settings.setLoadWithOverviewMode(true);
-            settings.setAppCacheEnabled(false);
             settings.setDomStorageEnabled(true);
-            settings.setPluginState(WebSettings.PluginState.ON);
-            settings.setUseWideViewPort(true);
-            settings.setBuiltInZoomControls(true);
-            settings.setDisplayZoomControls(false);
             wvDynmap.loadUrl(buildUrl());
+            wvDynmap.requestFocus();
         }
         return rootView;
     }
