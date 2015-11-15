@@ -127,13 +127,15 @@ public class ServerControlPlayersFragment extends Fragment {
         s.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                String selected = commandNamesArrayList.get(position);
+                String selected = playerCommands.getCommands().get(position).getCommand();
                 EditText et = (EditText) dialogView.findViewById(R.id.playerParams);
                 if (selected.contains("<")) {
-                    String[] split = selected.split("(?=<.*>)", 2);
-                    if (split.length > 1) {
+                    String[] split = selected.split("(?=<.*>)", 3);
+                    if (split.length > 2) {
                         et.setVisibility(View.VISIBLE);
-                        et.setHint(split[1]);
+                        et.setHint(split[2]);
+                    } else {
+                        et.setVisibility(View.GONE);
                     }
                 } else {
                     et.setVisibility(View.GONE);
