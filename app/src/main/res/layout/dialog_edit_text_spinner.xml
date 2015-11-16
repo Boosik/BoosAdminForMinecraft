@@ -18,7 +18,8 @@
               android:layout_height="match_parent"
               android:id="@+id/playerParams"
               android:visibility="gone"
-              android:inputType="text" android:layout_margin="16dp">
+              android:inputType="text" android:layout_marginLeft="16dp"
+              android:layout_marginBottom="16dp" android:layout_marginRight="16dp">
     </EditText>
 
 </LinearLayout>
