@@ -8,7 +8,9 @@
                                                 android:layout_width="match_parent"
                                                 android:layout_height="match_parent"
                                                 android:id="@+id/playerSpinner"
-                                                android:spinnerMode="dialog">
+                                                android:spinnerMode="dialog"
+                                                style="@style/Base.Widget.AppCompat.Spinner.Underlined"
+                                                android:layout_margin="16dp">
     </android.support.v7.widget.AppCompatSpinner>
 
     <EditText xmlns:android="http://schemas.android.com/apk/res/android"
@@ -16,7 +18,7 @@
               android:layout_height="match_parent"
               android:id="@+id/playerParams"
               android:visibility="gone"
-              android:inputType="text">
+              android:inputType="text" android:layout_margin="16dp">
     </EditText>
 
 </LinearLayout>
