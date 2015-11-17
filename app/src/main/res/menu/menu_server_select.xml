@@ -6,7 +6,7 @@
             android:orderInCategory="10"
             app:showAsAction="ifRoom"
             android:title="@string/add_server"
-            android:icon="@drawable/ic_plus"
+            android:icon="@drawable/ic_add_white_48dp"
             android:visible="true"
             android:enabled="true"
             android:onClick="onAddButtonClick"/>

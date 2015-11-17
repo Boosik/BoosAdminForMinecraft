@@ -3,6 +3,7 @@ package cz.boosik.boosadminforminecraft.app.activities;
 import java.io.FileNotFoundException;
 
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.ActionBar;
@@ -53,6 +54,8 @@ public class ServerControlActivity extends AppCompatActivity implements ActionBa
         final ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+        actionBar.setStackedBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.minecraft_green)));
+        actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.minecraft_green)));
         mSectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
         mViewPager.setAdapter(mSectionsPagerAdapter);
         mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
@@ -92,7 +95,7 @@ public class ServerControlActivity extends AppCompatActivity implements ActionBa
         switch (tab.getPosition()) {
             case 0: this.setTitle(R.string.server_commands);
                 break;
-            case 1: this.setTitle(R.string.player_commands);
+            case 1: this.setTitle(R.string.online_players);
                 break;
             case 2: this.setTitle(R.string.supported_plugins);
                 break;
