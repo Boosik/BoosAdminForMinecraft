@@ -28,6 +28,8 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
+ * Fragment used to display supported plugins
+ *
  * @author jakub.kolar@bsc-ideas.com
  */
 public class ServerControlPluginsFragment extends Fragment {
@@ -38,12 +40,29 @@ public class ServerControlPluginsFragment extends Fragment {
     SwipeRefreshLayout swipeView;
 
     private static final String ARG_SECTION_NUMBER = "section_number";
-    private CommandStorage supportedPlugins;
     private ArrayAdapter<String> adapter;
     private List<String> plugins = new ArrayList<>();
     private ArrayList<String> supportedPluginsNames;
     private HashMap<String, List<String>> pluginMap;
 
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.fragment_server_control_plugins, container, false);
+        ButterKnife.bind(this, rootView);
+        preparePluginCommands();
+        preparePluginsList();
+        updatePlugins();
+        prepareView();
+        return rootView;
+    }
+
+    /**
+     * Creates new instance of this fragment with the section number used for paging
+     *
+     * @param sectionNumber Section number in pager
+     * @return Instance of this fragment with set section number
+     */
     public static ServerControlPluginsFragment newInstance(int sectionNumber) {
         ServerControlPluginsFragment fragment = new ServerControlPluginsFragment();
         Bundle args = new Bundle();
@@ -52,25 +71,24 @@ public class ServerControlPluginsFragment extends Fragment {
         return fragment;
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_server_control_plugins, container, false);
-        ButterKnife.bind(this, rootView);
-        preparePluginCommands();
-        prepareOnlineList();
-        prepareView();
-        return rootView;
+    @OnItemClick(R.id.player_command_list)
+    public void onItemClick(int position) {
+        preparePlayerDialog(plugins.get(position));
     }
 
-    private void prepareOnlineList() {
-        adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, plugins);
+    /**
+     * Prepares the list of plugins
+     */
+    private void preparePluginsList() {
+        adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, plugins);
         lv.setAdapter(adapter);
-        updatePlugins();
     }
 
+    /**
+     * Prepares the plugin commands lists
+     */
     private void preparePluginCommands() {
-        supportedPlugins = new CommandStorage();
+        CommandStorage supportedPlugins = new CommandStorage();
         supportedPluginsNames = new ArrayList<>();
         pluginMap = new HashMap<>();
         ArrayList<Command> pluginArrayList = new ArrayList<>();
@@ -84,6 +102,9 @@ public class ServerControlPluginsFragment extends Fragment {
         }
     }
 
+    /**
+     * Prepares the view to make pull to refresh possible
+     */
     private void prepareView() {
         swipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -98,7 +119,6 @@ public class ServerControlPluginsFragment extends Fragment {
                 }, 3000);
             }
         });
-
         lv.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView absListView, int i) {
@@ -114,21 +134,24 @@ public class ServerControlPluginsFragment extends Fragment {
         });
     }
 
+    /**
+     * Updates the plugins list to the current values
+     */
     private void updatePlugins() {
         new LoadPluginsTask(this).execute();
     }
 
-    @OnItemClick(R.id.player_command_list)
-    public void onItemClick(int position) {
-        preparePlayerDialog(plugins.get(position));
-    }
-
+    /**
+     * Prepares the dialog that is shown on plugin name click
+     *
+     * @param plugin Clicked plugin
+     */
     private void preparePlayerDialog(final String plugin) {
         LayoutInflater factory = LayoutInflater.from(this.getActivity());
         final View dialogView = factory.inflate(R.layout.dialog_edit_text_spinner, null);
         AppCompatSpinner s = (AppCompatSpinner) dialogView.findViewById(R.id.playerSpinner);
         final List<String> pluginCommands = pluginMap.get(plugin.trim().split("[ ]", 2)[0].toLowerCase());
-        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, pluginCommands);
+        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, pluginCommands);
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         s.setAdapter(spinnerArrayAdapter);
         s.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -163,7 +186,7 @@ public class ServerControlPluginsFragment extends Fragment {
                         String commandString = pluginCommands.get(spinner.getSelectedItemPosition());
                         commandString = commandString.split("<.*>", 2)[0];
                         commandString = commandString + " " + editText.getText().toString();
-                        new ExecuteCommandTask((ServerControlActivity) getActivity(), getView(), ((ServerControlActivity) getActivity()).getClickListener()).execute(commandString);
+                        new ExecuteCommandTask(getActivity(), getView(), ((ServerControlActivity) getActivity()).getClickListener()).execute(commandString);
                     }
                 })
                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
@@ -174,19 +197,30 @@ public class ServerControlPluginsFragment extends Fragment {
                 .show();
     }
 
+    /**
+     * Gets the plugins
+     *
+     * @return The plugins
+     */
     public List<String> getPlugins() {
         return plugins;
     }
 
+    /**
+     * Gets the adapter
+     *
+     * @return The adapter
+     */
     public ArrayAdapter<String> getAdapter() {
         return adapter;
     }
 
+    /**
+     * Gets the supportedPluginsName
+     *
+     * @return The supportedPluginsName
+     */
     public ArrayList<String> getSupportedPluginsNames() {
         return supportedPluginsNames;
-    }
-
-    public CommandStorage getSupportedPlugins() {
-        return supportedPlugins;
     }
 }

@@ -7,6 +7,8 @@ import android.view.MenuItem;
 import cz.boosik.boosadminforminecraft.app.R;
 
 /**
+ * Activity of server add
+ *
  * @author jakub.kolar@bsc-ideas.com
  */
 public class ServerAddActivity extends AppCompatActivity {

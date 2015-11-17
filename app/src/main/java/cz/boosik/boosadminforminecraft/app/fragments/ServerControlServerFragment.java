@@ -25,6 +25,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
+ * Fragment used to display server commands list
+ *
  * @author jakub.kolar@bsc-ideas.com
  */
 public class ServerControlServerFragment extends Fragment {
@@ -34,15 +36,6 @@ public class ServerControlServerFragment extends Fragment {
 
     private static final String ARG_SECTION_NUMBER = "section_number";
     private CommandStorage baseCommands;
-    private ArrayAdapter<String> adapter;
-
-    public static ServerControlServerFragment newInstance(int sectionNumber) {
-        ServerControlServerFragment fragment = new ServerControlServerFragment();
-        Bundle args = new Bundle();
-        args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -51,22 +44,6 @@ public class ServerControlServerFragment extends Fragment {
         ButterKnife.bind(this, rootView);
         prepareServerCommands();
         return rootView;
-    }
-
-    private void prepareServerCommands() {
-        baseCommands = new CommandStorage();
-        ArrayList<Command> commandArrayList = new ArrayList<>();
-        ArrayList<String> commandNamesArrayList = new ArrayList<>();
-        commandArrayList.add(0, new Command(getString(R.string.custom_command), "<custom_command>"));
-        for (BaseCommands bc : BaseCommands.values()) {
-            commandArrayList.add(new Command(bc.name().toLowerCase().replace("_", " "), bc.getCommandString()));
-        }
-        baseCommands.setCommands(commandArrayList);
-        for (Command command : commandArrayList) {
-            commandNamesArrayList.add(command.getName());
-        }
-        adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, commandNamesArrayList);
-        lv.setAdapter(adapter);
     }
 
     @OnItemClick(R.id.server_command_list)
@@ -93,10 +70,48 @@ public class ServerControlServerFragment extends Fragment {
         } else if (commandString.contains("<player>")) {
             prepareEditTextDialog(commandString, "<player>", R.string.dialog_enter, false);
         } else {
-            new ExecuteCommandTask((ServerControlActivity) getActivity(), getView(), ((ServerControlActivity) getActivity()).getClickListener()).execute(commandString);
+            new ExecuteCommandTask(getActivity(), getView(), ((ServerControlActivity) getActivity()).getClickListener()).execute(commandString);
         }
     }
 
+    /**
+     * Creates new instance of this fragment with the section number used for paging
+     *
+     * @param sectionNumber Section number in pager
+     * @return Instance of this fragment with set section number
+     */
+    public static ServerControlServerFragment newInstance(int sectionNumber) {
+        ServerControlServerFragment fragment = new ServerControlServerFragment();
+        Bundle args = new Bundle();
+        args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    /**
+     * Prepares the server commands lists
+     */
+    private void prepareServerCommands() {
+        baseCommands = new CommandStorage();
+        ArrayList<Command> commandArrayList = new ArrayList<>();
+        ArrayList<String> commandNamesArrayList = new ArrayList<>();
+        commandArrayList.add(0, new Command(getString(R.string.custom_command), "<custom_command>"));
+        for (BaseCommands bc : BaseCommands.values()) {
+            commandArrayList.add(new Command(bc.name().toLowerCase().replace("_", " "), bc.getCommandString()));
+        }
+        baseCommands.setCommands(commandArrayList);
+        for (Command command : commandArrayList) {
+            commandNamesArrayList.add(command.getName());
+        }
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, commandNamesArrayList);
+        lv.setAdapter(adapter);
+    }
+
+    /**
+     * Prepares the dialog with number picker
+     *
+     * @param commandString Commands string
+     */
     private void preparePageDialog(final String commandString) {
         LayoutInflater factory = LayoutInflater.from(this.getActivity());
         final View dialogView = factory.inflate(R.layout.dialog_page, null);
@@ -107,7 +122,7 @@ public class ServerControlServerFragment extends Fragment {
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         CustomNumberPicker page = (CustomNumberPicker) dialogView.findViewById(R.id.page);
-                        new ExecuteCommandTask((ServerControlActivity) getActivity(), getView(), ((ServerControlActivity) getActivity()).getClickListener()).execute(commandString.replace("<page>", String.valueOf(page.getValue())));
+                        new ExecuteCommandTask(getActivity(), getView(), ((ServerControlActivity) getActivity()).getClickListener()).execute(commandString.replace("<page>", String.valueOf(page.getValue())));
                     }
                 })
                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
@@ -118,6 +133,14 @@ public class ServerControlServerFragment extends Fragment {
                 .show();
     }
 
+    /**
+     * Prepares the dialog with edit text
+     *
+     * @param commandString Commands string
+     * @param replacable    String to be replaced in commandString
+     * @param messageId     Message to be shown in the dialog
+     * @param isNumber      Should the dialog be set to allow only numeric input?
+     */
     private void prepareEditTextDialog(final String commandString, final String replacable, int messageId, boolean isNumber) {
         LayoutInflater factory = LayoutInflater.from(this.getActivity());
         final View dialogView = factory.inflate(R.layout.dialog_edit_text, null);
@@ -134,7 +157,7 @@ public class ServerControlServerFragment extends Fragment {
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         EditText editText = (EditText) dialogView.findViewById(R.id.editTextDialog);
-                        new ExecuteCommandTask((ServerControlActivity) getActivity(), getView(), ((ServerControlActivity) getActivity()).getClickListener()).execute(commandString.replace(replacable, editText.getText().toString()));
+                        new ExecuteCommandTask(getActivity(), getView(), ((ServerControlActivity) getActivity()).getClickListener()).execute(commandString.replace(replacable, editText.getText().toString()));
                     }
                 })
                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
@@ -145,11 +168,19 @@ public class ServerControlServerFragment extends Fragment {
                 .show();
     }
 
+    /**
+     * Prepares the dialog with spinner
+     *
+     * @param commandString Commands string
+     * @param replacable    String to be replaced in commandString
+     * @param messageId     Message to be shown in the dialog
+     * @param arrayId       Array to be used in the spinner
+     */
     private void prepareSpinnerDialog(final String commandString, final String replacable, int messageId, final int arrayId) {
         LayoutInflater factory = LayoutInflater.from(this.getActivity());
         final View dialogView = factory.inflate(R.layout.dialog_spinner, null);
         AppCompatSpinner s = (AppCompatSpinner) dialogView.findViewById(R.id.spinnerDialog);
-        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, Arrays.asList(getResources().getStringArray(arrayId))); //selected item will look like a spinner set from XML
+        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, Arrays.asList(getResources().getStringArray(arrayId))); //selected item will look like a spinner set from XML
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         s.setAdapter(spinnerArrayAdapter);
         new AlertDialog.Builder(getActivity())
@@ -159,7 +190,7 @@ public class ServerControlServerFragment extends Fragment {
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         AppCompatSpinner spinner = (AppCompatSpinner) dialogView.findViewById(R.id.spinnerDialog);
-                        new ExecuteCommandTask((ServerControlActivity) getActivity(), getView(), ((ServerControlActivity) getActivity()).getClickListener()).execute(commandString.replace(replacable, spinner.getSelectedItem().toString()));
+                        new ExecuteCommandTask(getActivity(), getView(), ((ServerControlActivity) getActivity()).getClickListener()).execute(commandString.replace(replacable, spinner.getSelectedItem().toString()));
                     }
                 })
                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {

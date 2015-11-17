@@ -1,5 +1,6 @@
 package cz.boosik.boosadminforminecraft.app.adapters;
 
+import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -13,15 +14,22 @@ import cz.boosik.boosadminforminecraft.app.fragments.ServerControlServerFragment
 import java.util.Locale;
 
 /**
+ * Adapter for section pager
+ *
  * @author jakub.kolar@bsc-ideas.com
  */
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
-    ServerControlActivity activity;
+    private Context context;
 
-    public SectionsPagerAdapter(ServerControlActivity activity, FragmentManager fm) {
+    /**
+     * Default constructor for sections adapter
+     * @param context Context of adapter
+     * @param fm Fragment manager
+     */
+    public SectionsPagerAdapter(Context context, FragmentManager fm) {
         super(fm);
-        this.activity = activity;
+        this.context = context;
     }
 
     @Override
@@ -49,13 +57,13 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         Locale l = Locale.getDefault();
         switch (position) {
             case 0:
-                return activity.getString(R.string.title_section1).toUpperCase(l);
+                return context.getString(R.string.title_section1).toUpperCase(l);
             case 1:
-                return activity.getString(R.string.title_section2).toUpperCase(l);
+                return context.getString(R.string.title_section2).toUpperCase(l);
             case 2:
-                return activity.getString(R.string.title_section3).toUpperCase(l);
+                return context.getString(R.string.title_section3).toUpperCase(l);
             case 3:
-                return activity.getString(R.string.title_section4).toUpperCase(l);
+                return context.getString(R.string.title_section4).toUpperCase(l);
         }
         return null;
     }

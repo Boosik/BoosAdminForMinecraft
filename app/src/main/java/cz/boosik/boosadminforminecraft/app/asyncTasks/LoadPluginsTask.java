@@ -6,12 +6,19 @@ import cz.boosik.boosadminforminecraft.app.fragments.ServerControlPluginsFragmen
 import cz.boosik.boosadminforminecraft.app.query.QueryResponse;
 
 /**
+ * Async task used to load installed plugins from the server query
+ *
  * @author jakub.kolar@bsc-ideas.com
  */
 public class LoadPluginsTask extends AsyncTask<Void, Void, QueryResponse> {
 
     ServerControlPluginsFragment fragment;
 
+    /**
+     * Default constructor
+     *
+     * @param fragment ServerControlPluginsFragment
+     */
     public LoadPluginsTask(ServerControlPluginsFragment fragment) {
         this.fragment = fragment;
     }

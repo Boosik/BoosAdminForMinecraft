@@ -20,6 +20,8 @@ import cz.boosik.boosadminforminecraft.app.serverStore.Server;
 import cz.boosik.boosadminforminecraft.app.serverStore.StorageProvider;
 
 /**
+ * Fragment used to add new server
+ *
  * @author jakub.kolar@bsc-ideas.com
  */
 public class ServerAddFragment extends Fragment {
@@ -43,6 +45,14 @@ public class ServerAddFragment extends Fragment {
     @Bind(R.id.btSave)
     Button btSave;
 
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_server_add, container, false);
+        ButterKnife.bind(this, view);
+        return view;
+    }
+
     @OnClick(R.id.btSave)
     public void saveServer() {
         String serverName = etServerName.getText().toString();
@@ -57,20 +67,14 @@ public class ServerAddFragment extends Fragment {
         try {
             if (storageProvider.saveServer(new Server(serverName, serverHost, serverPort, password, queryHost, queryPort, dynmapHost, dynmapPort))) {
                 Intent i = new Intent(getActivity(), ServerListActivity.class);
+                i.putExtra("error", "delete");
                 startActivity(i);
+                getActivity().finish();
             } else {
                 Snackbar.make(getView(), getString(R.string.duplicate), Snackbar.LENGTH_LONG).show();
             }
         } catch (Exception e) {
-
+            //do nothing
         }
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_server_add, container, false);
-        ButterKnife.bind(this, view);
-        return view;
     }
 }

@@ -1,7 +1,6 @@
 package cz.boosik.boosadminforminecraft.app.asyncTasks;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.design.widget.Snackbar;
 import android.view.View;
@@ -15,21 +14,36 @@ import cz.boosik.boosadminforminecraft.app.serverStore.Server;
 import java.io.IOException;
 
 /**
+ * Async task used for command execution using rcon
+ *
  * @author jakub.kolar@bsc-ideas.com
  */
 public class ExecuteCommandTask extends AsyncTask<String, Void, String> {
 
-    Context context;
-    View view;
-    View.OnClickListener listener;
-    Server server;
+    private Context context;
+    private View view;
+    private View.OnClickListener listener;
+    private Server server;
 
+    /**
+     * Default constructor
+     *
+     * @param context  Context of async task
+     * @param view     View to be targeted by snackbar
+     * @param listener Listener of snackbar
+     */
     public ExecuteCommandTask(Context context, View view, View.OnClickListener listener) {
         this.context = context;
         this.view = view;
         this.listener = listener;
     }
 
+    /**
+     * Constructor that should only be used to check server rcon availability
+     *
+     * @param context Context of async task
+     * @param server  Server to be checked
+     */
     public ExecuteCommandTask(Context context, Server server) {
         this.context = context;
         this.server = server;
@@ -37,7 +51,7 @@ public class ExecuteCommandTask extends AsyncTask<String, Void, String> {
 
     @Override
     protected String doInBackground(String... params) {
-        String response = null;
+        String response;
         try {
             if (context instanceof ServerListActivity) {
                 if (((ServerListActivity) context).getRcon() == null || ((ServerListActivity) context).getRcon().isShutdown()) {
@@ -45,7 +59,7 @@ public class ExecuteCommandTask extends AsyncTask<String, Void, String> {
                 }
                 response = ((ServerListActivity) context).getRcon().send(params[0]);
             } else {
-                server = ((ServerControlActivity)context).getServer();
+                server = ((ServerControlActivity) context).getServer();
                 if (((ServerControlActivity) context).getRcon() == null || ((ServerControlActivity) context).getRcon().isShutdown()) {
                     ((ServerControlActivity) context).setRcon(new RCon(server.getHost(), Integer.valueOf(server.getPort()), server.getPassword().toCharArray()));
                 }
@@ -61,7 +75,6 @@ public class ExecuteCommandTask extends AsyncTask<String, Void, String> {
 
     @Override
     protected void onPostExecute(String result) {
-
         if (context instanceof ServerListActivity) {
             if (result == null) {
                 ((ServerListActivity) context).invokeError("rcon");
@@ -71,28 +84,23 @@ public class ExecuteCommandTask extends AsyncTask<String, Void, String> {
                 return;
             }
         }
-
         if (result == null) {
-//            ((ServerControlActivity)context).invokeError("rcon");
-            Intent i = new Intent(context, ServerListActivity.class);
-            i.putExtra("error", "rcon");
-            context.startActivity(i);
+            ((ServerControlActivity) context).invokeError("rcon");
             return;
         }
-
         if (view != null) {
             if (result.isEmpty()) {
-                ((ServerControlActivity)context).setSnackbar(Snackbar
+                ((ServerControlActivity) context).setSnackbar(Snackbar
                         .make(view, R.string.no_response, Snackbar.LENGTH_INDEFINITE)
                         .setAction(R.string.ok, listener));
-                ((ServerControlActivity)context).getSnackbar().show();
+                ((ServerControlActivity) context).getSnackbar().show();
                 return;
             }
             result = result.replaceAll("��.", "");
-            ((ServerControlActivity)context).setSnackbar(Snackbar
+            ((ServerControlActivity) context).setSnackbar(Snackbar
                     .make(view, result, Snackbar.LENGTH_INDEFINITE)
                     .setAction(R.string.ok, listener));
-            ((ServerControlActivity)context).getSnackbar().show();
+            ((ServerControlActivity) context).getSnackbar().show();
         }
     }
 }

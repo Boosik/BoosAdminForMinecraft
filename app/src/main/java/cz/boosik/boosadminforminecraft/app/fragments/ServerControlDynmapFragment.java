@@ -15,6 +15,8 @@ import cz.boosik.boosadminforminecraft.app.R;
 import cz.boosik.boosadminforminecraft.app.activities.ServerControlActivity;
 
 /**
+ * Fragment used to display dynamic map
+ *
  * @author jakub.kolar@bsc-ideas.com
  */
 public class ServerControlDynmapFragment extends Fragment {
@@ -24,6 +26,21 @@ public class ServerControlDynmapFragment extends Fragment {
 
     static final String ARG_SECTION_NUMBER = "section_number";
 
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.fragment_server_control_dynmap, container, false);
+        ButterKnife.bind(this, rootView);
+        setupWebView();
+        return rootView;
+    }
+
+    /**
+     * Creates new instance of this fragment with the section number used for paging
+     *
+     * @param sectionNumber Section number in pager
+     * @return Instance of this fragment with set section number
+     */
     public static ServerControlDynmapFragment newInstance(int sectionNumber) {
         ServerControlDynmapFragment fragment = new ServerControlDynmapFragment();
         Bundle args = new Bundle();
@@ -32,24 +49,11 @@ public class ServerControlDynmapFragment extends Fragment {
         return fragment;
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_server_control_dynmap, container, false);
-        ButterKnife.bind(this, rootView);
-        if (((ServerControlActivity) getActivity()).isDynmapAvailable()) {
-            wvDynmap.setWebChromeClient(new WebChromeClient());
-            wvDynmap.setWebViewClient(new WebViewClient());
-            WebSettings settings = wvDynmap.getSettings();
-            settings.setAllowUniversalAccessFromFileURLs(true);
-            settings.setJavaScriptEnabled(true);
-            settings.setDomStorageEnabled(true);
-            wvDynmap.loadUrl(buildUrl());
-            wvDynmap.requestFocus();
-        }
-        return rootView;
-    }
-
+    /**
+     * Builds the dynamic map URL to the desired format
+     *
+     * @return formatted URL
+     */
     private String buildUrl() {
         String url;
         if (((ServerControlActivity) getActivity()).getServer().getDynmapPort().isEmpty()) {
@@ -60,5 +64,21 @@ public class ServerControlDynmapFragment extends Fragment {
         if (url.startsWith("https://")) url = url.replace("https://", "http://");
         if (!url.startsWith("http://")) url = "http://" + url;
         return url;
+    }
+
+    /**
+     * Set up the webview
+     */
+    private void setupWebView() {
+        if (((ServerControlActivity) getActivity()).isDynmapAvailable()) {
+            wvDynmap.setWebChromeClient(new WebChromeClient());
+            wvDynmap.setWebViewClient(new WebViewClient());
+            WebSettings settings = wvDynmap.getSettings();
+            settings.setAllowUniversalAccessFromFileURLs(true);
+            settings.setJavaScriptEnabled(true);
+            settings.setDomStorageEnabled(true);
+            wvDynmap.loadUrl(buildUrl());
+            wvDynmap.requestFocus();
+        }
     }
 }

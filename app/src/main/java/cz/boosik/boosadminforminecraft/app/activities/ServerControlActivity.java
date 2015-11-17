@@ -15,16 +15,17 @@ import butterknife.ButterKnife;
 import com.google.rconclient.rcon.RCon;
 import cz.boosik.boosadminforminecraft.app.R;
 import cz.boosik.boosadminforminecraft.app.adapters.SectionsPagerAdapter;
-import cz.boosik.boosadminforminecraft.app.asyncTasks.ExecuteCommandTask;
-import cz.boosik.boosadminforminecraft.app.asyncTasks.LoadOnlinePlayersTask;
 import cz.boosik.boosadminforminecraft.app.components.CustomViewPager;
 import cz.boosik.boosadminforminecraft.app.serverStore.Server;
 import cz.boosik.boosadminforminecraft.app.serverStore.StorageProvider;
 import cz.boosik.boosadminforminecraft.app.query.*;
 
 /**
+ * Activity of server control
+ *
  * @author jakub.kolar@bsc-ideas.com
  */
+@SuppressWarnings("deprecation")
 public class ServerControlActivity extends AppCompatActivity implements ActionBar.TabListener {
 
     @Bind(R.id.pager)
@@ -36,7 +37,7 @@ public class ServerControlActivity extends AppCompatActivity implements ActionBa
     private Snackbar snackbar;
     private MCQuery mcQuery;
 
-    public final View.OnClickListener clickListener = new View.OnClickListener() {
+    private final View.OnClickListener clickListener = new View.OnClickListener() {
         public void onClick(View v) {
             snackbar.dismiss();
         }
@@ -49,6 +50,7 @@ public class ServerControlActivity extends AppCompatActivity implements ActionBa
         setTitle(getString(R.string.app_name));
         ButterKnife.bind(this);
         final ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
         SectionsPagerAdapter mSectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
         mViewPager.setAdapter(mSectionsPagerAdapter);
@@ -98,6 +100,11 @@ public class ServerControlActivity extends AppCompatActivity implements ActionBa
     public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
     }
 
+    /**
+     * Prepares session data based on the selected server name
+     *
+     * @param serverName Name of the server to select
+     */
     private void prepareSessionData(String serverName) {
         StorageProvider storageProvider = new StorageProvider(this, "servers.json");
         try {
@@ -114,38 +121,95 @@ public class ServerControlActivity extends AppCompatActivity implements ActionBa
         }
     }
 
+    /**
+     * Starts the server list activity and add error information to intent
+     *
+     * @param type The type of error
+     */
+    public void invokeError(String type) {
+        Intent i = new Intent(this, ServerListActivity.class);
+        i.putExtra("error", type);
+        this.startActivity(i);
+        finish();
+    }
+
+    /**
+     * Returns if the dynmap is available
+     *
+     * @return The dynmapAvailable
+     */
     public boolean isDynmapAvailable() {
         return dynmapAvailable;
     }
 
+    /**
+     * Gets the snackbar
+     *
+     * @return The snackbar
+     */
     public Snackbar getSnackbar() {
         return snackbar;
     }
 
+    /**
+     * Sets the snackbar
+     *
+     * @param snackbar The snackbar
+     */
     public void setSnackbar(Snackbar snackbar) {
         this.snackbar = snackbar;
     }
 
+    /**
+     * Gets the mcQuery
+     *
+     * @return The mcQuery
+     */
     public MCQuery getMcQuery() {
         return mcQuery;
     }
 
+    /**
+     * Gets the clickListener
+     *
+     * @return The clickListener
+     */
     public View.OnClickListener getClickListener() {
         return clickListener;
     }
 
+    /**
+     * Gets the server
+     *
+     * @return The server
+     */
     public Server getServer() {
         return server;
     }
 
+    /**
+     * Sets the server
+     *
+     * @param server The server
+     */
     public void setServer(Server server) {
         this.server = server;
     }
 
+    /**
+     * Gets the rcon
+     *
+     * @return The rcon
+     */
     public RCon getRcon() {
         return rcon;
     }
 
+    /**
+     * Sets the rcon
+     *
+     * @param rcon The rcon
+     */
     public void setRcon(RCon rcon) {
         this.rcon = rcon;
     }

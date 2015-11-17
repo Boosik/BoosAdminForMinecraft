@@ -1,18 +1,15 @@
 package cz.boosik.boosadminforminecraft.app.asyncTasks;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.design.widget.Snackbar;
-import android.view.View;
-import cz.boosik.boosadminforminecraft.app.R;
 import cz.boosik.boosadminforminecraft.app.activities.ServerControlActivity;
 import cz.boosik.boosadminforminecraft.app.activities.ServerListActivity;
 import cz.boosik.boosadminforminecraft.app.fragments.ServerControlPlayersFragment;
-import cz.boosik.boosadminforminecraft.app.fragments.ServerListFragment;
 import cz.boosik.boosadminforminecraft.app.query.QueryResponse;
 
 /**
+ * Async task used to load online players from the server query
+ *
  * @author jakub.kolar@bsc-ideas.com
  */
 public class LoadOnlinePlayersTask extends AsyncTask<Void, Void, QueryResponse> {
@@ -20,11 +17,22 @@ public class LoadOnlinePlayersTask extends AsyncTask<Void, Void, QueryResponse> 
     ServerControlPlayersFragment fragment;
     Context context;
 
+    /**
+     * Default constructor
+     *
+     * @param fragment ServerControlPlayersFragment
+     * @param context  Context of async task
+     */
     public LoadOnlinePlayersTask(ServerControlPlayersFragment fragment, Context context) {
         this.fragment = fragment;
         this.context = context;
     }
 
+    /**
+     * Constructor that should only be used to check server query availability
+     *
+     * @param context Context of async task
+     */
     public LoadOnlinePlayersTask(Context context) {
         this.context = context;
     }
@@ -36,9 +44,9 @@ public class LoadOnlinePlayersTask extends AsyncTask<Void, Void, QueryResponse> 
                 context = fragment.getActivity();
             }
             if (context instanceof ServerListActivity) {
-                return ((ServerListActivity)context).getMcQuery().fullStat();
+                return ((ServerListActivity) context).getMcQuery().fullStat();
             } else {
-                return ((ServerControlActivity)context).getMcQuery().fullStat();
+                return ((ServerControlActivity) context).getMcQuery().fullStat();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -48,7 +56,6 @@ public class LoadOnlinePlayersTask extends AsyncTask<Void, Void, QueryResponse> 
 
     @Override
     protected void onPostExecute(QueryResponse response) {
-
         if (context instanceof ServerListActivity) {
             if (response == null) {
                 ((ServerListActivity) context).invokeError("query");
@@ -58,14 +65,10 @@ public class LoadOnlinePlayersTask extends AsyncTask<Void, Void, QueryResponse> 
                 return;
             }
         }
-
         if (response == null) {
-            Intent i = new Intent(context, ServerListActivity.class);
-            i.putExtra("error", "rcon");
-            context.startActivity(i);
+            ((ServerControlActivity) context).invokeError("query");
             return;
         }
-
         if (fragment != null) {
             fragment.getOnlinePlayers().clear();
             fragment.getOnlinePlayers().addAll(response.getPlayerList());

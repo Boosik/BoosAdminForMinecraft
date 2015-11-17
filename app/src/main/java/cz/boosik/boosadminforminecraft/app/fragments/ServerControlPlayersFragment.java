@@ -26,6 +26,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Fragment used to display online players list
+ *
  * @author jakub.kolar@bsc-ideas.com
  */
 public class ServerControlPlayersFragment extends Fragment {
@@ -41,6 +43,24 @@ public class ServerControlPlayersFragment extends Fragment {
     private List<String> onlinePlayers;
     private ArrayList<String> commandNamesArrayList;
 
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.fragment_server_control_players, container, false);
+        ButterKnife.bind(this, rootView);
+        preparePlayerCommands();
+        prepareOnlineList();
+        updateOnlinePlayers();
+        prepareView();
+        return rootView;
+    }
+
+    /**
+     * Creates new instance of this fragment with the section number used for paging
+     *
+     * @param sectionNumber Section number in pager
+     * @return Instance of this fragment with set section number
+     */
     public static ServerControlPlayersFragment newInstance(int sectionNumber) {
         ServerControlPlayersFragment fragment = new ServerControlPlayersFragment();
         Bundle args = new Bundle();
@@ -49,24 +69,23 @@ public class ServerControlPlayersFragment extends Fragment {
         return fragment;
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_server_control_players, container, false);
-        ButterKnife.bind(this, rootView);
-        preparePlayerCommands();
-        prepareOnlineList();
-        prepareView();
-        return rootView;
+    @OnItemClick(R.id.player_command_list)
+    public void onItemClick(int position) {
+        preparePlayerDialog(onlinePlayers.get(position));
     }
 
+    /**
+     * Prepares the list of online players
+     */
     private void prepareOnlineList() {
         onlinePlayers = new ArrayList<>();
-        adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, onlinePlayers);
+        adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, onlinePlayers);
         lv.setAdapter(adapter);
-        updateOnlinePlayers();
     }
 
+    /**
+     * Prepares the player commands lists
+     */
     private void preparePlayerCommands() {
         playerCommands = new CommandStorage();
         commandNamesArrayList = new ArrayList<>();
@@ -80,6 +99,9 @@ public class ServerControlPlayersFragment extends Fragment {
         }
     }
 
+    /**
+     * Prepares the view to make pull to refresh possible
+     */
     private void prepareView() {
         swipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -94,7 +116,6 @@ public class ServerControlPlayersFragment extends Fragment {
                 }, 3000);
             }
         });
-
         lv.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView absListView, int i) {
@@ -110,20 +131,23 @@ public class ServerControlPlayersFragment extends Fragment {
         });
     }
 
+    /**
+     * Updates the online players list to the current values
+     */
     private void updateOnlinePlayers() {
-        new LoadOnlinePlayersTask(this,getActivity()).execute();
+        new LoadOnlinePlayersTask(this, getActivity()).execute();
     }
 
-    @OnItemClick(R.id.player_command_list)
-    public void onItemClick(int position) {
-        preparePlayerDialog(onlinePlayers.get(position));
-    }
-
+    /**
+     * Prepares the dialog that is shown on player name click
+     *
+     * @param player Clicked player
+     */
     private void preparePlayerDialog(final String player) {
         LayoutInflater factory = LayoutInflater.from(this.getActivity());
         final View dialogView = factory.inflate(R.layout.dialog_edit_text_spinner, null);
         AppCompatSpinner s = (AppCompatSpinner) dialogView.findViewById(R.id.playerSpinner);
-        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, commandNamesArrayList); //selected item will look like a spinner set from XML
+        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, commandNamesArrayList); //selected item will look like a spinner set from XML
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         s.setAdapter(spinnerArrayAdapter);
         s.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -160,7 +184,7 @@ public class ServerControlPlayersFragment extends Fragment {
                         String commandString = playerCommands.getCommands().get(spinner.getSelectedItemPosition()).getCommand();
                         commandString = commandString.split("<player>", 2)[0];
                         commandString = commandString + player + " " + editText.getText().toString();
-                        new ExecuteCommandTask((ServerControlActivity) getActivity(), getView(), ((ServerControlActivity) getActivity()).getClickListener()).execute(commandString);
+                        new ExecuteCommandTask(getActivity(), getView(), ((ServerControlActivity) getActivity()).getClickListener()).execute(commandString);
                     }
                 })
                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
@@ -171,10 +195,20 @@ public class ServerControlPlayersFragment extends Fragment {
                 .show();
     }
 
+    /**
+     * Gets the onlinePlayers
+     *
+     * @return The onlinePlayers
+     */
     public List<String> getOnlinePlayers() {
         return onlinePlayers;
     }
 
+    /**
+     * Gets the adapter
+     *
+     * @return The adapter
+     */
     public ArrayAdapter<String> getAdapter() {
         return adapter;
     }

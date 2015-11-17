@@ -1,6 +1,8 @@
 package cz.boosik.boosadminforminecraft.app.commands;
 
 /**
+ * Enum containing all base player commands
+ *
  * @author jakub.kolar@bsc-ideas.com
  */
 public enum PlayerCommands {

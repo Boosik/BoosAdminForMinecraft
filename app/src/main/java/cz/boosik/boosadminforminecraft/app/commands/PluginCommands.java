@@ -1,6 +1,8 @@
 package cz.boosik.boosadminforminecraft.app.commands;
 
 /**
+ * Enum containing all supported plugins and their commands
+ *
  * @author jakub.kolar@bsc-ideas.com
  */
 public enum PluginCommands {

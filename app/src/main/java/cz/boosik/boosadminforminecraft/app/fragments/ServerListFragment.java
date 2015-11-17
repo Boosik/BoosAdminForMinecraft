@@ -2,9 +2,7 @@ package cz.boosik.boosadminforminecraft.app.fragments;
 
 import android.app.Fragment;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,10 +15,7 @@ import butterknife.ButterKnife;
 import butterknife.OnItemClick;
 import butterknife.OnItemLongClick;
 import cz.boosik.boosadminforminecraft.app.R;
-import cz.boosik.boosadminforminecraft.app.activities.ServerControlActivity;
 import cz.boosik.boosadminforminecraft.app.activities.ServerListActivity;
-import cz.boosik.boosadminforminecraft.app.asyncTasks.ExecuteCommandTask;
-import cz.boosik.boosadminforminecraft.app.asyncTasks.LoadOnlinePlayersTask;
 import cz.boosik.boosadminforminecraft.app.query.MCQuery;
 import cz.boosik.boosadminforminecraft.app.serverStore.Server;
 import cz.boosik.boosadminforminecraft.app.serverStore.ServerStorage;
@@ -32,6 +27,8 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 /**
+ * Fragment used to display servers list
+ *
  * @author jakub.kolar@bsc-ideas.com
  */
 public class ServerListFragment extends Fragment {
@@ -47,7 +44,7 @@ public class ServerListFragment extends Fragment {
     private ServerStorage serverStore;
     private ArrayAdapter<String> adapter;
     private ArrayList<Server> servers;
-    private LinkedList<String> srvs = new LinkedList<String>();
+    private LinkedList<String> srvs = new LinkedList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -58,17 +55,30 @@ public class ServerListFragment extends Fragment {
         return view;
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        if (servers != null) {
-            ((ServerListActivity) getActivity()).setSnackbar(Snackbar
-                    .make(getView(), R.string.server_list_hint, Snackbar.LENGTH_LONG)
-                    .setAction(R.string.ok, ((ServerListActivity) getActivity()).getClickListener()));
-            ((ServerListActivity) getActivity()).getSnackbar().show();
+    @OnItemClick(R.id.server_list)
+    public void onItemClick(int position) {
+        String choice = (String) lv.getItemAtPosition(position);
+        Server server = servers.get(position);
+        MCQuery mcQuery = null;
+        try {
+            mcQuery = new MCQuery(server.getQueryHost(), Integer.valueOf(server.getQueryPort()));
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+        ((ServerListActivity) getActivity()).setSelected(choice);
+        ((ServerListActivity) getActivity()).setMcQuery(mcQuery);
+        ((ServerListActivity) getActivity()).checkRcon(server);
     }
 
+    @OnItemLongClick(R.id.server_list)
+    public boolean onItemLongClick(int position) {
+        showDeleteDialog(position);
+        return true;
+    }
+
+    /**
+     * Prepares the server list
+     */
     private void prepareServerList() {
         storageProvider = new StorageProvider(getActivity(), "servers.json");
         try {
@@ -83,32 +93,15 @@ public class ServerListFragment extends Fragment {
         for (Server server : servers) {
             srvs.add(server.getName());
         }
-        adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, srvs);
+        adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, srvs);
         lv.setAdapter(adapter);
     }
 
-    @OnItemClick(R.id.server_list)
-    public void onItemClick(int position) {
-        String choice = (String) lv.getItemAtPosition(position);
-        Server server = servers.get(position);
-        MCQuery mcQuery = null;
-        try {
-            mcQuery = new MCQuery(server.getQueryHost(), Integer.valueOf(server.getQueryPort()));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        ((ServerListActivity)getActivity()).setSelected(choice);
-        ((ServerListActivity)getActivity()).setMcQuery(mcQuery);
-        ((ServerListActivity)getActivity()).checkRcon(server);
-
-    }
-
-    @OnItemLongClick(R.id.server_list)
-    public boolean onItemLongClick(int position) {
-        showDeleteDialog(position);
-        return true;
-    }
-
+    /**
+     * Deletes server at the given position
+     *
+     * @param position Position of server
+     */
     private void deleteServer(int position) {
         servers.remove(position);
         serverStore.setServers(servers);
@@ -120,10 +113,15 @@ public class ServerListFragment extends Fragment {
         }
     }
 
+    /**
+     * Displays the delete confirmation dialog
+     *
+     * @param position clicked item position
+     */
     private void showDeleteDialog(final int position) {
         new AlertDialog.Builder(getActivity())
-                .setTitle("Delete entry")
-                .setMessage("Are you sure you want to delete this entry?")
+                .setTitle(R.string.delete_entry)
+                .setMessage(R.string.delete_entry_msg)
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         deleteServer(position);
