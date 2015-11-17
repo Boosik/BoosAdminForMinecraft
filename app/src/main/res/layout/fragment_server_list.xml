@@ -9,17 +9,17 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:orientation="vertical">
-
-        <TextView
-                android:id="@+id/server_list_header"
-                style="?android:attr/listSeparatorTextViewStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/server_list"/>
         <ListView
                 android:id="@+id/server_list"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:listSelector="@android:color/transparent"
+                android:cacheColorHint="@android:color/transparent"
+                android:divider="@null"
+                android:dividerHeight="5dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:clipToPadding="false">
         </ListView>
     </LinearLayout>
     <TextView

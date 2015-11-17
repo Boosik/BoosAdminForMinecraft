@@ -16,6 +16,7 @@ import butterknife.ButterKnife;
 import butterknife.OnItemClick;
 import cz.boosik.boosadminforminecraft.app.R;
 import cz.boosik.boosadminforminecraft.app.activities.ServerControlActivity;
+import cz.boosik.boosadminforminecraft.app.adapters.CardArrayStringAdapter;
 import cz.boosik.boosadminforminecraft.app.asyncTasks.ExecuteCommandTask;
 import cz.boosik.boosadminforminecraft.app.asyncTasks.LoadPluginsTask;
 import cz.boosik.boosadminforminecraft.app.commands.Command;
@@ -40,7 +41,7 @@ public class ServerControlPluginsFragment extends Fragment {
     SwipeRefreshLayout swipeView;
 
     private static final String ARG_SECTION_NUMBER = "section_number";
-    private ArrayAdapter<String> adapter;
+    private CardArrayStringAdapter adapter;
     private List<String> plugins = new ArrayList<>();
     private ArrayList<String> supportedPluginsNames;
     private HashMap<String, List<String>> pluginMap;
@@ -80,7 +81,7 @@ public class ServerControlPluginsFragment extends Fragment {
      * Prepares the list of plugins
      */
     private void preparePluginsList() {
-        adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, plugins);
+        adapter = new CardArrayStringAdapter(getActivity(), R.layout.list_item_card_one_line, plugins);
         lv.setAdapter(adapter);
     }
 

@@ -1,13 +1,12 @@
 package cz.boosik.boosadminforminecraft.app.fragments;
 
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import butterknife.Bind;
@@ -16,6 +15,7 @@ import butterknife.OnItemClick;
 import butterknife.OnItemLongClick;
 import cz.boosik.boosadminforminecraft.app.R;
 import cz.boosik.boosadminforminecraft.app.activities.ServerListActivity;
+import cz.boosik.boosadminforminecraft.app.adapters.CardArrayServerAdapter;
 import cz.boosik.boosadminforminecraft.app.query.MCQuery;
 import cz.boosik.boosadminforminecraft.app.serverStore.Server;
 import cz.boosik.boosadminforminecraft.app.serverStore.ServerStorage;
@@ -24,7 +24,6 @@ import cz.boosik.boosadminforminecraft.app.serverStore.StorageProvider;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.LinkedList;
 
 /**
  * Fragment used to display servers list
@@ -37,14 +36,11 @@ public class ServerListFragment extends Fragment {
     ListView lv;
     @Bind(R.id.no_servers_added)
     TextView tv;
-    @Bind(R.id.server_list_header)
-    TextView tv2;
 
     private StorageProvider storageProvider;
     private ServerStorage serverStore;
-    private ArrayAdapter<String> adapter;
+    private CardArrayServerAdapter adapter;
     private ArrayList<Server> servers;
-    private LinkedList<String> srvs = new LinkedList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -57,15 +53,14 @@ public class ServerListFragment extends Fragment {
 
     @OnItemClick(R.id.server_list)
     public void onItemClick(int position) {
-        String choice = (String) lv.getItemAtPosition(position);
-        Server server = servers.get(position);
+        Server server = (Server) lv.getItemAtPosition(position);
         MCQuery mcQuery = null;
         try {
             mcQuery = new MCQuery(server.getQueryHost(), Integer.valueOf(server.getQueryPort()));
         } catch (Exception e) {
             e.printStackTrace();
         }
-        ((ServerListActivity) getActivity()).setSelected(choice);
+        ((ServerListActivity) getActivity()).setSelected(server.getName());
         ((ServerListActivity) getActivity()).setMcQuery(mcQuery);
         ((ServerListActivity) getActivity()).checkRcon(server);
     }
@@ -86,14 +81,11 @@ public class ServerListFragment extends Fragment {
         } catch (FileNotFoundException e) {
             lv.setVisibility(View.GONE);
             tv.setVisibility(View.VISIBLE);
-            tv2.setVisibility(View.GONE);
             return;
         }
         servers = serverStore.getServers();
-        for (Server server : servers) {
-            srvs.add(server.getName());
-        }
-        adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, srvs);
+
+        adapter = new CardArrayServerAdapter(getContext(), R.layout.list_item_card, servers);
         lv.setAdapter(adapter);
     }
 
@@ -105,7 +97,6 @@ public class ServerListFragment extends Fragment {
     private void deleteServer(int position) {
         servers.remove(position);
         serverStore.setServers(servers);
-        srvs.remove(position);
         try {
             storageProvider.writeServers(serverStore);
         } catch (IOException e) {

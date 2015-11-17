@@ -1,5 +1,7 @@
 package cz.boosik.boosadminforminecraft.app.fragments;
 
+import android.annotation.TargetApi;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -74,7 +76,6 @@ public class ServerControlDynmapFragment extends Fragment {
             wvDynmap.setWebChromeClient(new WebChromeClient());
             wvDynmap.setWebViewClient(new WebViewClient());
             WebSettings settings = wvDynmap.getSettings();
-            settings.setAllowUniversalAccessFromFileURLs(true);
             settings.setJavaScriptEnabled(true);
             settings.setDomStorageEnabled(true);
             wvDynmap.loadUrl(buildUrl());

@@ -1,6 +1,3 @@
-/**
- *
- */
 package com.google.rconclient.rcon;
 
 /**

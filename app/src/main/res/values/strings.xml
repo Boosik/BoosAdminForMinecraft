@@ -35,6 +35,7 @@
     <string name="online_players">Online players</string>
     <string name="custom_command">custom command</string>
     <string name="supported_plugins">Supported plugins</string>
+    <string name="dynamic_map">Dynamic map</string>
     <string name="authenticate_error">Error: Unable to authenticate on the server. Check your RCON IP/hostname, port and password!</string>
     <string name="no_response">Command was successfully executed!</string>
     <string name="title_section1">Server</string>

@@ -4,14 +4,6 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:orientation="vertical">
-
-    <TextView
-            android:id="@+id/server_list_header"
-            style="?android:attr/listSeparatorTextViewStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/supported_plugins"/>
-
     <android.support.v4.widget.SwipeRefreshLayout
             xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:fab="http://schemas.android.com/apk/res-auto"
@@ -19,11 +11,15 @@
             android:layout_height="fill_parent"
             android:orientation="vertical"
             android:id="@+id/plugins_refresher">
-
         <ListView
                 android:id="@+id/player_command_list"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:divider="@null"
+                android:dividerHeight="5dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:clipToPadding="false">
         </ListView>
     </android.support.v4.widget.SwipeRefreshLayout>
 </LinearLayout>

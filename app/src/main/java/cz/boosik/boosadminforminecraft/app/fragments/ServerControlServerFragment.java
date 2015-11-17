@@ -15,6 +15,7 @@ import butterknife.ButterKnife;
 import butterknife.OnItemClick;
 import cz.boosik.boosadminforminecraft.app.R;
 import cz.boosik.boosadminforminecraft.app.activities.ServerControlActivity;
+import cz.boosik.boosadminforminecraft.app.adapters.CardArrayStringAdapter;
 import cz.boosik.boosadminforminecraft.app.asyncTasks.ExecuteCommandTask;
 import cz.boosik.boosadminforminecraft.app.commands.BaseCommands;
 import cz.boosik.boosadminforminecraft.app.commands.Command;
@@ -45,6 +46,8 @@ public class ServerControlServerFragment extends Fragment {
         prepareServerCommands();
         return rootView;
     }
+
+
 
     @OnItemClick(R.id.server_command_list)
     public void onItemClick(int position) {
@@ -103,7 +106,7 @@ public class ServerControlServerFragment extends Fragment {
         for (Command command : commandArrayList) {
             commandNamesArrayList.add(command.getName());
         }
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, commandNamesArrayList);
+        CardArrayStringAdapter adapter = new CardArrayStringAdapter(getActivity(), R.layout.list_item_card_one_line, commandNamesArrayList);
         lv.setAdapter(adapter);
     }
 

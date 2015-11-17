@@ -35,7 +35,7 @@ public class ServerListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_server_list);
-        setTitle(getString(R.string.app_name));
+        setTitle(getString(R.string.server_list));
         String error = getIntent().getStringExtra("error");
         if (error != null) {
             invokeError(error);

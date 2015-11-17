@@ -16,6 +16,7 @@ import butterknife.ButterKnife;
 import butterknife.OnItemClick;
 import cz.boosik.boosadminforminecraft.app.R;
 import cz.boosik.boosadminforminecraft.app.activities.ServerControlActivity;
+import cz.boosik.boosadminforminecraft.app.adapters.CardArrayStringAdapter;
 import cz.boosik.boosadminforminecraft.app.asyncTasks.ExecuteCommandTask;
 import cz.boosik.boosadminforminecraft.app.asyncTasks.LoadOnlinePlayersTask;
 import cz.boosik.boosadminforminecraft.app.commands.Command;
@@ -39,7 +40,7 @@ public class ServerControlPlayersFragment extends Fragment {
 
     private static final String ARG_SECTION_NUMBER = "section_number";
     private CommandStorage playerCommands;
-    private ArrayAdapter<String> adapter;
+    private CardArrayStringAdapter adapter;
     private List<String> onlinePlayers;
     private ArrayList<String> commandNamesArrayList;
 
@@ -79,7 +80,7 @@ public class ServerControlPlayersFragment extends Fragment {
      */
     private void prepareOnlineList() {
         onlinePlayers = new ArrayList<>();
-        adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, onlinePlayers);
+        adapter = new CardArrayStringAdapter(getActivity(), R.layout.list_item_card_one_line, onlinePlayers);
         lv.setAdapter(adapter);
     }
 

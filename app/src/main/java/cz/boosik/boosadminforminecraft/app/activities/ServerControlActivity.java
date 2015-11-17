@@ -36,6 +36,7 @@ public class ServerControlActivity extends AppCompatActivity implements ActionBa
     private RCon rcon = null;
     private Snackbar snackbar;
     private MCQuery mcQuery;
+    private SectionsPagerAdapter mSectionsPagerAdapter;
 
     private final View.OnClickListener clickListener = new View.OnClickListener() {
         public void onClick(View v) {
@@ -52,7 +53,7 @@ public class ServerControlActivity extends AppCompatActivity implements ActionBa
         final ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-        SectionsPagerAdapter mSectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
+        mSectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
         mViewPager.setAdapter(mSectionsPagerAdapter);
         mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
@@ -88,6 +89,16 @@ public class ServerControlActivity extends AppCompatActivity implements ActionBa
     @Override
     public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
         mViewPager.setCurrentItem(tab.getPosition());
+        switch (tab.getPosition()) {
+            case 0: this.setTitle(R.string.server_commands);
+                break;
+            case 1: this.setTitle(R.string.player_commands);
+                break;
+            case 2: this.setTitle(R.string.supported_plugins);
+                break;
+            case 3: this.setTitle(R.string.dynamic_map);
+                break;
+        }
         if (tab.getPosition() == 3) mViewPager.setPagingEnabled(false);
     }
 
