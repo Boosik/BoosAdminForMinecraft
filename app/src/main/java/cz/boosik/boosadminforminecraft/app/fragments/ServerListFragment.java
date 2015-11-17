@@ -1,5 +1,6 @@
 package cz.boosik.boosadminforminecraft.app.fragments;
 
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -9,11 +10,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
-import butterknife.Bind;
-import butterknife.ButterKnife;
-import butterknife.OnItemClick;
-import butterknife.OnItemLongClick;
+import butterknife.*;
+import com.melnykov.fab.FloatingActionButton;
 import cz.boosik.boosadminforminecraft.app.R;
+import cz.boosik.boosadminforminecraft.app.activities.ServerAddActivity;
 import cz.boosik.boosadminforminecraft.app.activities.ServerListActivity;
 import cz.boosik.boosadminforminecraft.app.adapters.CardArrayServerAdapter;
 import cz.boosik.boosadminforminecraft.app.query.MCQuery;
@@ -36,6 +36,8 @@ public class ServerListFragment extends Fragment {
     ListView lv;
     @Bind(R.id.no_servers_added)
     TextView tv;
+    @Bind(R.id.fab)
+    FloatingActionButton fab;
 
     private StorageProvider storageProvider;
     private ServerStorage serverStore;
@@ -71,6 +73,12 @@ public class ServerListFragment extends Fragment {
         return true;
     }
 
+    @OnClick(R.id.fab)
+    public void onFabClick() {
+        Intent i = new Intent(getActivity(), ServerAddActivity.class);
+        startActivity(i);
+    }
+
     /**
      * Prepares the server list
      */
@@ -87,6 +95,9 @@ public class ServerListFragment extends Fragment {
 
         adapter = new CardArrayServerAdapter(getContext(), R.layout.list_item_card, servers);
         lv.setAdapter(adapter);
+
+        fab.attachToListView(lv);
+        fab.show();
     }
 
     /**

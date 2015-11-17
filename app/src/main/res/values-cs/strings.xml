@@ -7,7 +7,7 @@
     <!-- Server list -->
     <string name="server_list">Seznam serverů</string>
     <string name="server_list_hint">Pro odstranění serveru použijte dlouhé stisknutí.</string>
-    <string name="no_servers_added">Žádné servery nebyly přidány. Prosím přidejte server pomocí horní nabídky.</string>
+    <string name="no_servers_added">Žádné servery nebyly přidány. Prosím přidejte server pomocí tlačítka dole.</string>
     <string name="rcon_error">Chyba: nepodařilo se připojit k RCON, je server online?</string>
     <string name="query_error">Chyba: nepodařilo se připojit ke Query, je server online?</string>
     <string name="delete_entry">Odstranit server</string>

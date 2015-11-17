@@ -45,18 +45,7 @@ public class ServerListActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_server_select, menu);
-        return true;
-    }
-
-    /**
-     * Starts the server add activity
-     *
-     * @param m A MenuItem
-     */
-    public void onAddButtonClick(MenuItem m) {
-        Intent i = new Intent(this, ServerAddActivity.class);
-        startActivity(i);
+        return false;
     }
 
     /**
