@@ -1,7 +1,5 @@
 package cz.boosik.boosadminforminecraft.app.fragments;
 
-import android.annotation.TargetApi;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -35,6 +33,31 @@ public class ServerControlDynmapFragment extends Fragment {
         ButterKnife.bind(this, rootView);
         setupWebView();
         return rootView;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        wvDynmap.onPause();
+        wvDynmap.pauseTimers();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        wvDynmap.onResume();
+        wvDynmap.resumeTimers();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        wvDynmap.loadUrl("about:blank");
+        wvDynmap.stopLoading();
+        wvDynmap.setWebChromeClient(null);
+        wvDynmap.setWebViewClient(null);
+        wvDynmap.destroy();
+        wvDynmap = null;
     }
 
     /**

@@ -5,7 +5,7 @@ import android.os.AsyncTask;
 import cz.boosik.boosadminforminecraft.app.activities.ServerControlActivity;
 import cz.boosik.boosadminforminecraft.app.activities.ServerListActivity;
 import cz.boosik.boosadminforminecraft.app.fragments.ServerControlPlayersFragment;
-import cz.boosik.boosadminforminecraft.app.query.QueryResponse;
+import query.QueryResponse;
 
 /**
  * Async task used to load online players from the server query

@@ -1,4 +1,4 @@
-package cz.boosik.boosadminforminecraft.app.query;
+package query;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;

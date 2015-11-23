@@ -1,4 +1,4 @@
-package cz.boosik.boosadminforminecraft.app.query;
+package query;
 
 import java.util.ArrayList;
 import java.util.Arrays;

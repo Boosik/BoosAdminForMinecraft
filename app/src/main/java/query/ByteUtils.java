@@ -1,4 +1,4 @@
-package cz.boosik.boosadminforminecraft.app.query;
+package query;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;

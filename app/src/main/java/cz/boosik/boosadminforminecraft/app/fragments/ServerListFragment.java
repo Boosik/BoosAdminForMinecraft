@@ -16,7 +16,7 @@ import cz.boosik.boosadminforminecraft.app.R;
 import cz.boosik.boosadminforminecraft.app.activities.ServerAddActivity;
 import cz.boosik.boosadminforminecraft.app.activities.ServerListActivity;
 import cz.boosik.boosadminforminecraft.app.adapters.CardArrayServerAdapter;
-import cz.boosik.boosadminforminecraft.app.query.MCQuery;
+import query.MCQuery;
 import cz.boosik.boosadminforminecraft.app.serverStore.Server;
 import cz.boosik.boosadminforminecraft.app.serverStore.ServerStorage;
 import cz.boosik.boosadminforminecraft.app.serverStore.StorageProvider;

@@ -1,25 +1,26 @@
 package cz.boosik.boosadminforminecraft.app.activities;
 
-import java.io.FileNotFoundException;
-
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.app.ActionBar;
-import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
-import android.view.*;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.View;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.google.rconclient.rcon.RCon;
 import cz.boosik.boosadminforminecraft.app.R;
 import cz.boosik.boosadminforminecraft.app.adapters.SectionsPagerAdapter;
 import cz.boosik.boosadminforminecraft.app.components.CustomViewPager;
+import query.MCQuery;
 import cz.boosik.boosadminforminecraft.app.serverStore.Server;
 import cz.boosik.boosadminforminecraft.app.serverStore.StorageProvider;
-import cz.boosik.boosadminforminecraft.app.query.*;
+
+import java.io.FileNotFoundException;
 
 /**
  * Activity of server control
@@ -107,7 +108,10 @@ public class ServerControlActivity extends AppCompatActivity implements ActionBa
 
     @Override
     public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-        if (tab.getPosition() == 3) mViewPager.setPagingEnabled(true);
+        if (tab.getPosition() == 3) {
+            mViewPager.setPagingEnabled(true);
+        }
+
     }
 
     @Override

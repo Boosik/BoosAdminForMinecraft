@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="gamemodes_array">
+        <item>survival</item>
+        <item>creative</item>
+        <item>adventure</item>
+        <item>spectator</item>
+    </string-array>
+
+    <string-array name="time_array">
+        <item>day</item>
+        <item>night</item>
+    </string-array>
+
+    <string-array name="weather_array">
+        <item>clear</item>
+        <item>rain</item>
+        <item>thunder</item>
+    </string-array>
+</resources>
