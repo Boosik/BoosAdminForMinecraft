@@ -5,7 +5,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import cz.boosik.boosadminforminecraft.app.R;
-import cz.boosik.boosadminforminecraft.app.activities.ServerControlActivity;
 import cz.boosik.boosadminforminecraft.app.fragments.ServerControlDynmapFragment;
 import cz.boosik.boosadminforminecraft.app.fragments.ServerControlPlayersFragment;
 import cz.boosik.boosadminforminecraft.app.fragments.ServerControlPluginsFragment;
@@ -21,6 +20,7 @@ import java.util.Locale;
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
     private Context context;
+    private int count;
 
     /**
      * Default constructor for sections adapter
@@ -49,7 +49,11 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return 4;
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
     }
 
     @Override

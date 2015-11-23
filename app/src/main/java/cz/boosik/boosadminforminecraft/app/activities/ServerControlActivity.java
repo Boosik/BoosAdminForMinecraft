@@ -72,11 +72,11 @@ public class ServerControlActivity extends AppCompatActivity implements ActionBa
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        int tempCount = mSectionsPagerAdapter.getCount();
         if (!dynmapAvailable) {
-            tempCount = 3;
+            mSectionsPagerAdapter.setCount(3);
+            mSectionsPagerAdapter.notifyDataSetChanged();
         }
+        int tempCount = mSectionsPagerAdapter.getCount();
         for (int i = 0; i < tempCount; i++) {
             actionBar.addTab(
                     actionBar.newTab()

@@ -1,6 +1,5 @@
 package cz.boosik.boosadminforminecraft.app.activities;
 
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;

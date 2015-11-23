@@ -4,5 +4,9 @@
         <item name="colorPrimary">@color/minecraft_green</item>
         <item name="colorAccent">@color/minecraft_accent</item>
         <item name="colorPrimaryDark">@color/minecraft_green_dark</item>
+        <item name="actionBarStyle">@style/Theme.MyApp.ActionBar</item>
+    </style>
+    <style name="Theme.MyApp.ActionBar" parent="style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
+        <item name="elevation">4dp</item>
     </style>
 </resources>
