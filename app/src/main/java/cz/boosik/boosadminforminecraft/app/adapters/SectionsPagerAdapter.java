@@ -20,7 +20,7 @@ import java.util.Locale;
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
     private Context context;
-    private int count;
+    private int count = 4;
 
     /**
      * Default constructor for sections adapter
