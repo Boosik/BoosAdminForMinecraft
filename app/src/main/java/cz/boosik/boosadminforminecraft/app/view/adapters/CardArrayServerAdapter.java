@@ -1,4 +1,4 @@
-package cz.boosik.boosadminforminecraft.app.adapters;
+package cz.boosik.boosadminforminecraft.app.view.adapters;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import cz.boosik.boosadminforminecraft.app.R;
-import cz.boosik.boosadminforminecraft.app.serverStore.Server;
+import cz.boosik.boosadminforminecraft.app.model.servers.Server;
 
 import java.util.ArrayList;
 import java.util.List;

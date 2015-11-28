@@ -12,15 +12,15 @@ import android.view.Menu;
 import android.view.View;
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import com.google.rconclient.rcon.RCon;
 import cz.boosik.boosadminforminecraft.app.R;
-import cz.boosik.boosadminforminecraft.app.adapters.SectionsPagerAdapter;
-import cz.boosik.boosadminforminecraft.app.components.CustomViewPager;
-import query.MCQuery;
-import cz.boosik.boosadminforminecraft.app.serverStore.Server;
-import cz.boosik.boosadminforminecraft.app.serverStore.StorageProvider;
+import cz.boosik.boosadminforminecraft.app.model.servers.Server;
+import cz.boosik.boosadminforminecraft.app.model.servers.ServerProvider;
+import cz.boosik.boosadminforminecraft.app.view.adapters.SectionsPagerAdapter;
+import cz.boosik.boosadminforminecraft.app.view.components.CustomViewPager;
 
 import java.io.FileNotFoundException;
+
+import static cz.boosik.boosadminforminecraft.app.fragments.AbstractServerControlFragment.selectedServer;
 
 /**
  * Activity of server control
@@ -32,12 +32,8 @@ public class ServerControlActivity extends AppCompatActivity implements ActionBa
 
     @Bind(R.id.pager)
     CustomViewPager mViewPager;
-
-    private Server server;
     private boolean dynmapAvailable;
-    private RCon rcon = null;
     private Snackbar snackbar;
-    private MCQuery mcQuery;
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
     private final View.OnClickListener clickListener = new View.OnClickListener() {
@@ -67,11 +63,6 @@ public class ServerControlActivity extends AppCompatActivity implements ActionBa
         });
         String serverName = getIntent().getStringExtra("serverName");
         prepareSessionData(serverName);
-        try {
-            mcQuery = new MCQuery(server.getQueryHost(), Integer.valueOf(server.getQueryPort()));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         if (!dynmapAvailable) {
             mSectionsPagerAdapter.setCount(3);
             mSectionsPagerAdapter.notifyDataSetChanged();
@@ -83,6 +74,7 @@ public class ServerControlActivity extends AppCompatActivity implements ActionBa
                             .setText(mSectionsPagerAdapter.getPageTitle(i))
                             .setTabListener(this));
         }
+//        commandProvider = new CommandProvider(this);
     }
 
     @Override
@@ -94,13 +86,17 @@ public class ServerControlActivity extends AppCompatActivity implements ActionBa
     public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
         mViewPager.setCurrentItem(tab.getPosition());
         switch (tab.getPosition()) {
-            case 0: this.setTitle(R.string.server_commands);
+            case 0:
+                this.setTitle(R.string.server_commands);
                 break;
-            case 1: this.setTitle(R.string.online_players);
+            case 1:
+                this.setTitle(R.string.online_players);
                 break;
-            case 2: this.setTitle(R.string.supported_plugins);
+            case 2:
+                this.setTitle(R.string.supported_plugins);
                 break;
-            case 3: this.setTitle(R.string.dynamic_map);
+            case 3:
+                this.setTitle(R.string.dynamic_map);
                 break;
         }
         if (tab.getPosition() == 3) mViewPager.setPagingEnabled(false);
@@ -124,12 +120,12 @@ public class ServerControlActivity extends AppCompatActivity implements ActionBa
      * @param serverName Name of the server to select
      */
     private void prepareSessionData(String serverName) {
-        StorageProvider storageProvider = new StorageProvider(this, "servers.json");
+        ServerProvider serverProvider = new ServerProvider(this, "servers.json");
         try {
-            for (Server s : storageProvider.readServers().getServers()) {
+            for (Server s : serverProvider.readServers().getServers()) {
                 if (s.getName().equals(serverName)) {
-                    server = s;
-                    if (!server.getDynmapHost().isEmpty()) {
+                    selectedServer = s;
+                    if (!selectedServer.getDynmapHost().isEmpty()) {
                         dynmapAvailable = true;
                     }
                 }
@@ -179,15 +175,6 @@ public class ServerControlActivity extends AppCompatActivity implements ActionBa
     }
 
     /**
-     * Gets the mcQuery
-     *
-     * @return The mcQuery
-     */
-    public MCQuery getMcQuery() {
-        return mcQuery;
-    }
-
-    /**
      * Gets the clickListener
      *
      * @return The clickListener
@@ -196,39 +183,4 @@ public class ServerControlActivity extends AppCompatActivity implements ActionBa
         return clickListener;
     }
 
-    /**
-     * Gets the server
-     *
-     * @return The server
-     */
-    public Server getServer() {
-        return server;
-    }
-
-    /**
-     * Sets the server
-     *
-     * @param server The server
-     */
-    public void setServer(Server server) {
-        this.server = server;
-    }
-
-    /**
-     * Gets the rcon
-     *
-     * @return The rcon
-     */
-    public RCon getRcon() {
-        return rcon;
-    }
-
-    /**
-     * Sets the rcon
-     *
-     * @param rcon The rcon
-     */
-    public void setRcon(RCon rcon) {
-        this.rcon = rcon;
-    }
 }

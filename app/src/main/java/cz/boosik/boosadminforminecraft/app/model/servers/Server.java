@@ -1,4 +1,4 @@
-package cz.boosik.boosadminforminecraft.app.serverStore;
+package cz.boosik.boosadminforminecraft.app.model.servers;
 
 /**
  * POJO representing the server

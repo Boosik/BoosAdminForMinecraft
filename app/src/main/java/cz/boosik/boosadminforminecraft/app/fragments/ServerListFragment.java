@@ -1,8 +1,7 @@
 package cz.boosik.boosadminforminecraft.app.fragments;
 
-import android.content.Intent;
-import android.support.v4.app.Fragment;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
@@ -15,22 +14,24 @@ import com.melnykov.fab.FloatingActionButton;
 import cz.boosik.boosadminforminecraft.app.R;
 import cz.boosik.boosadminforminecraft.app.activities.ServerAddActivity;
 import cz.boosik.boosadminforminecraft.app.activities.ServerListActivity;
-import cz.boosik.boosadminforminecraft.app.adapters.CardArrayServerAdapter;
+import cz.boosik.boosadminforminecraft.app.model.servers.Server;
+import cz.boosik.boosadminforminecraft.app.model.servers.ServerProvider;
+import cz.boosik.boosadminforminecraft.app.model.servers.ServerStorage;
+import cz.boosik.boosadminforminecraft.app.view.adapters.CardArrayServerAdapter;
 import query.MCQuery;
-import cz.boosik.boosadminforminecraft.app.serverStore.Server;
-import cz.boosik.boosadminforminecraft.app.serverStore.ServerStorage;
-import cz.boosik.boosadminforminecraft.app.serverStore.StorageProvider;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+
+import static cz.boosik.boosadminforminecraft.app.activities.ServerListActivity.query;
 
 /**
  * Fragment used to display servers list
  *
  * @author jakub.kolar@bsc-ideas.com
  */
-public class ServerListFragment extends Fragment {
+public class ServerListFragment extends AbstractServerFragment {
 
     @Bind(R.id.server_list)
     ListView lv;
@@ -39,7 +40,7 @@ public class ServerListFragment extends Fragment {
     @Bind(R.id.fab)
     FloatingActionButton fab;
 
-    private StorageProvider storageProvider;
+    private ServerProvider serverProvider;
     private ServerStorage serverStore;
     private CardArrayServerAdapter adapter;
     private ArrayList<Server> servers;
@@ -55,16 +56,13 @@ public class ServerListFragment extends Fragment {
 
     @OnItemClick(R.id.server_list)
     public void onItemClick(int position) {
-        Server server = (Server) lv.getItemAtPosition(position);
-        MCQuery mcQuery = null;
+        selectedServer = (Server) lv.getItemAtPosition(position);
         try {
-            mcQuery = new MCQuery(server.getQueryHost(), Integer.valueOf(server.getQueryPort()));
+            query = new MCQuery(selectedServer.getQueryHost(), Integer.valueOf(selectedServer.getQueryPort()));
         } catch (Exception e) {
             e.printStackTrace();
         }
-        ((ServerListActivity) getActivity()).setSelected(server.getName());
-        ((ServerListActivity) getActivity()).setMcQuery(mcQuery);
-        ((ServerListActivity) getActivity()).checkRcon(server);
+        ((ServerListActivity)getActivity()).checkRcon();
     }
 
     @OnItemLongClick(R.id.server_list)
@@ -83,9 +81,9 @@ public class ServerListFragment extends Fragment {
      * Prepares the server list
      */
     private void prepareServerList() {
-        storageProvider = new StorageProvider(getActivity(), "servers.json");
+        serverProvider = new ServerProvider(getActivity(), "servers.json");
         try {
-            serverStore = storageProvider.readServers();
+            serverStore = serverProvider.readServers();
         } catch (FileNotFoundException e) {
             lv.setVisibility(View.GONE);
             tv.setVisibility(View.VISIBLE);
@@ -109,7 +107,7 @@ public class ServerListFragment extends Fragment {
         servers.remove(position);
         serverStore.setServers(servers);
         try {
-            storageProvider.writeServers(serverStore);
+            serverProvider.writeServers(serverStore);
         } catch (IOException e) {
             e.printStackTrace();
         }

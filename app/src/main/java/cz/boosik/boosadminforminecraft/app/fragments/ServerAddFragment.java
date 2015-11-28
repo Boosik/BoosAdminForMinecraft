@@ -16,8 +16,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cz.boosik.boosadminforminecraft.app.R;
 import cz.boosik.boosadminforminecraft.app.activities.ServerListActivity;
-import cz.boosik.boosadminforminecraft.app.serverStore.Server;
-import cz.boosik.boosadminforminecraft.app.serverStore.StorageProvider;
+import cz.boosik.boosadminforminecraft.app.model.servers.Server;
+import cz.boosik.boosadminforminecraft.app.model.servers.ServerProvider;
 
 /**
  * Fragment used to add new server
@@ -63,9 +63,9 @@ public class ServerAddFragment extends Fragment {
         String queryHost = etQueryHost.getText().toString();
         String queryPort = etQueryPort.getText().toString();
         String password = etPassword.getText().toString();
-        StorageProvider storageProvider = new StorageProvider(getActivity(), "servers.json");
+        ServerProvider serverProvider = new ServerProvider(getActivity(), "servers.json");
         try {
-            if (storageProvider.saveServer(new Server(serverName, serverHost, serverPort, password, queryHost, queryPort, dynmapHost, dynmapPort))) {
+            if (serverProvider.saveServer(new Server(serverName, serverHost, serverPort, password, queryHost, queryPort, dynmapHost, dynmapPort))) {
                 Intent i = new Intent(getActivity(), ServerListActivity.class);
                 i.putExtra("error", "delete");
                 startActivity(i);

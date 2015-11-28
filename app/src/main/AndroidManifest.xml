@@ -1,38 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="cz.boosik.boosadminforminecraft.app" >
+          package="cz.boosik.boosadminforminecraft.app">
 
-    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
-        android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:theme="@style/AppTheme"
-        android:largeHeap="true">
+            android:allowBackup="true"
+            android:icon="@mipmap/ic_launcher"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme"
+            android:largeHeap="true"
+            android:name=".App">
         <activity
-            android:name=".activities.ServerListActivity"
-            android:label="@string/app_name" >
+                android:name=".activities.ServerListActivity"
+                android:label="@string/app_name">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.ServerAddActivity"
-            android:label="@string/app_name"
-            android:parentActivityName=".activities.ServerListActivity" >
+                android:name=".activities.ServerAddActivity"
+                android:label="@string/app_name"
+                android:parentActivityName=".activities.ServerListActivity">
             <meta-data
                     android:name="android.support.PARENT_ACTIVITY"
-                    android:value="cz.boosik.boosadminforminecraft.app.activities.ServerListActivity" />
+                    android:value="cz.boosik.boosadminforminecraft.app.activities.ServerListActivity"/>
         </activity>
         <activity
-            android:name=".activities.ServerControlActivity"
-            android:label="@string/app_name"
-            android:parentActivityName=".activities.ServerListActivity" >
+                android:name=".activities.ServerControlActivity"
+                android:label="@string/app_name"
+                android:parentActivityName=".activities.ServerListActivity">
             <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="cz.boosik.boosadminforminecraft.app.activities.ServerListActivity" />
+                    android:name="android.support.PARENT_ACTIVITY"
+                    android:value="cz.boosik.boosadminforminecraft.app.activities.ServerListActivity"/>
         </activity>
     </application>
 
