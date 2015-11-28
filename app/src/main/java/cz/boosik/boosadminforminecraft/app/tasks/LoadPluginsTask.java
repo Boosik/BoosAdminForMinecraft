@@ -1,9 +1,12 @@
-package cz.boosik.boosadminforminecraft.app.asyncTasks;
+package cz.boosik.boosadminforminecraft.app.tasks;
 
 import android.os.AsyncTask;
-import cz.boosik.boosadminforminecraft.app.activities.ServerControlActivity;
+import android.support.v4.app.Fragment;
 import cz.boosik.boosadminforminecraft.app.fragments.ServerControlPluginsFragment;
+import cz.boosik.boosadminforminecraft.app.model.commands.CommandProvider;
 import query.QueryResponse;
+
+import static cz.boosik.boosadminforminecraft.app.fragments.AbstractServerControlFragment.query;
 
 /**
  * Async task used to load installed plugins from the server query
@@ -12,21 +15,20 @@ import query.QueryResponse;
  */
 public class LoadPluginsTask extends AsyncTask<Void, Void, QueryResponse> {
 
-    ServerControlPluginsFragment fragment;
+    Fragment context;
 
     /**
      * Default constructor
      *
-     * @param fragment ServerControlPluginsFragment
      */
-    public LoadPluginsTask(ServerControlPluginsFragment fragment) {
-        this.fragment = fragment;
+    public LoadPluginsTask(Fragment context) {
+        this.context = context;
     }
 
     @Override
     protected QueryResponse doInBackground(Void... params) {
         try {
-            return ((ServerControlActivity) fragment.getActivity()).getMcQuery().fullStat();
+            return query.fullStat();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -35,9 +37,10 @@ public class LoadPluginsTask extends AsyncTask<Void, Void, QueryResponse> {
 
     @Override
     protected void onPostExecute(QueryResponse response) {
+        ServerControlPluginsFragment fragment = (ServerControlPluginsFragment)context;
         fragment.getPlugins().clear();
         for (String plugin : response.getPlugins()) {
-            for (String supportedPlugin : fragment.getSupportedPluginsNames()) {
+            for (String supportedPlugin : CommandProvider.supportedPluginNames) {
                 if (plugin.toLowerCase().contains(supportedPlugin.toLowerCase())) {
                     fragment.getPlugins().add(plugin);
                 }

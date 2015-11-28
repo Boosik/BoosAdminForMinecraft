@@ -3,7 +3,6 @@ package cz.boosik.boosadminforminecraft.app.fragments;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatSpinner;
@@ -15,17 +14,9 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnItemClick;
 import cz.boosik.boosadminforminecraft.app.R;
-import cz.boosik.boosadminforminecraft.app.activities.ServerControlActivity;
-import cz.boosik.boosadminforminecraft.app.adapters.CardArrayStringAdapter;
-import cz.boosik.boosadminforminecraft.app.asyncTasks.ExecuteCommandTask;
-import cz.boosik.boosadminforminecraft.app.asyncTasks.LoadPluginsTask;
-import cz.boosik.boosadminforminecraft.app.commands.Command;
-import cz.boosik.boosadminforminecraft.app.commands.CommandStorage;
-import cz.boosik.boosadminforminecraft.app.commands.PluginCommands;
+import cz.boosik.boosadminforminecraft.app.model.commands.CommandProvider;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -33,7 +24,7 @@ import java.util.List;
  *
  * @author jakub.kolar@bsc-ideas.com
  */
-public class ServerControlPluginsFragment extends Fragment {
+public class ServerControlPluginsFragment extends AbstractServerControlFragment{
 
     @Bind(R.id.player_command_list)
     ListView lv;
@@ -41,17 +32,17 @@ public class ServerControlPluginsFragment extends Fragment {
     SwipeRefreshLayout swipeView;
 
     private static final String ARG_SECTION_NUMBER = "section_number";
-    private CardArrayStringAdapter adapter;
     private List<String> plugins = new ArrayList<>();
-    private ArrayList<String> supportedPluginsNames;
-    private HashMap<String, List<String>> pluginMap;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_server_control_plugins, container, false);
         ButterKnife.bind(this, rootView);
-        preparePluginCommands();
+        if (query == null) {
+            initializeQuery();
+        }
         preparePluginsList();
         updatePlugins();
         prepareView();
@@ -81,26 +72,8 @@ public class ServerControlPluginsFragment extends Fragment {
      * Prepares the list of plugins
      */
     private void preparePluginsList() {
-        adapter = new CardArrayStringAdapter(getActivity(), R.layout.list_item_card_one_line, plugins);
-        lv.setAdapter(adapter);
-    }
-
-    /**
-     * Prepares the plugin commands lists
-     */
-    private void preparePluginCommands() {
-        CommandStorage supportedPlugins = new CommandStorage();
-        supportedPluginsNames = new ArrayList<>();
-        pluginMap = new HashMap<>();
-        ArrayList<Command> pluginArrayList = new ArrayList<>();
-        for (PluginCommands bc : PluginCommands.values()) {
-            pluginArrayList.add(new Command(bc.name().toLowerCase().replace("_", "-"), bc.getCommandString()));
-        }
-        supportedPlugins.setCommands(pluginArrayList);
-        for (Command command : pluginArrayList) {
-            supportedPluginsNames.add(command.getName());
-            pluginMap.put(command.getName(), Arrays.asList(command.getCommand().split(";")));
-        }
+        pluginAdapter.setData(plugins);
+        lv.setAdapter(pluginAdapter);
     }
 
     /**
@@ -139,7 +112,7 @@ public class ServerControlPluginsFragment extends Fragment {
      * Updates the plugins list to the current values
      */
     private void updatePlugins() {
-        new LoadPluginsTask(this).execute();
+        loadPlugins();
     }
 
     /**
@@ -151,7 +124,7 @@ public class ServerControlPluginsFragment extends Fragment {
         LayoutInflater factory = LayoutInflater.from(this.getActivity());
         final View dialogView = factory.inflate(R.layout.dialog_edit_text_spinner, null);
         AppCompatSpinner s = (AppCompatSpinner) dialogView.findViewById(R.id.playerSpinner);
-        final List<String> pluginCommands = pluginMap.get(plugin.trim().split("[ ]", 2)[0].toLowerCase());
+        final List<String> pluginCommands = CommandProvider.pluginCommandsMap.get(plugin.trim().split("[ ]", 2)[0].toLowerCase());
         ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, pluginCommands);
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         s.setAdapter(spinnerArrayAdapter);
@@ -187,7 +160,7 @@ public class ServerControlPluginsFragment extends Fragment {
                         String commandString = pluginCommands.get(spinner.getSelectedItemPosition());
                         commandString = commandString.split("<.*>", 2)[0];
                         commandString = commandString + " " + editText.getText().toString();
-                        new ExecuteCommandTask(getActivity(), getView(), ((ServerControlActivity) getActivity()).getClickListener()).execute(commandString);
+                        executeCommand(commandString);
                     }
                 })
                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
@@ -213,15 +186,6 @@ public class ServerControlPluginsFragment extends Fragment {
      * @return The adapter
      */
     public ArrayAdapter<String> getAdapter() {
-        return adapter;
-    }
-
-    /**
-     * Gets the supportedPluginsName
-     *
-     * @return The supportedPluginsName
-     */
-    public ArrayList<String> getSupportedPluginsNames() {
-        return supportedPluginsNames;
+        return pluginAdapter;
     }
 }

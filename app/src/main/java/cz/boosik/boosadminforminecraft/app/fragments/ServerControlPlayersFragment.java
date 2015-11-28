@@ -3,7 +3,6 @@ package cz.boosik.boosadminforminecraft.app.fragments;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatSpinner;
@@ -15,13 +14,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnItemClick;
 import cz.boosik.boosadminforminecraft.app.R;
-import cz.boosik.boosadminforminecraft.app.activities.ServerControlActivity;
-import cz.boosik.boosadminforminecraft.app.adapters.CardArrayStringAdapter;
-import cz.boosik.boosadminforminecraft.app.asyncTasks.ExecuteCommandTask;
-import cz.boosik.boosadminforminecraft.app.asyncTasks.LoadOnlinePlayersTask;
-import cz.boosik.boosadminforminecraft.app.commands.Command;
-import cz.boosik.boosadminforminecraft.app.commands.CommandStorage;
-import cz.boosik.boosadminforminecraft.app.commands.PlayerCommands;
+import cz.boosik.boosadminforminecraft.app.model.commands.CommandProvider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +24,7 @@ import java.util.List;
  *
  * @author jakub.kolar@bsc-ideas.com
  */
-public class ServerControlPlayersFragment extends Fragment {
+public class ServerControlPlayersFragment extends AbstractServerControlFragment {
 
     @Bind(R.id.player_command_list)
     ListView lv;
@@ -39,17 +32,16 @@ public class ServerControlPlayersFragment extends Fragment {
     SwipeRefreshLayout swipeView;
 
     private static final String ARG_SECTION_NUMBER = "section_number";
-    private CommandStorage playerCommands;
-    private CardArrayStringAdapter adapter;
     private List<String> onlinePlayers;
-    private ArrayList<String> commandNamesArrayList;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_server_control_players, container, false);
         ButterKnife.bind(this, rootView);
-        preparePlayerCommands();
+        if (query == null) {
+            initializeQuery();
+        }
         prepareOnlineList();
         updateOnlinePlayers();
         prepareView();
@@ -80,24 +72,8 @@ public class ServerControlPlayersFragment extends Fragment {
      */
     private void prepareOnlineList() {
         onlinePlayers = new ArrayList<>();
-        adapter = new CardArrayStringAdapter(getActivity(), R.layout.list_item_card_one_line, onlinePlayers);
-        lv.setAdapter(adapter);
-    }
-
-    /**
-     * Prepares the player commands lists
-     */
-    private void preparePlayerCommands() {
-        playerCommands = new CommandStorage();
-        commandNamesArrayList = new ArrayList<>();
-        ArrayList<Command> commandArrayList = new ArrayList<>();
-        for (PlayerCommands bc : PlayerCommands.values()) {
-            commandArrayList.add(new Command(bc.name().toLowerCase().replace("_", " "), bc.getCommandString()));
-        }
-        playerCommands.setCommands(commandArrayList);
-        for (Command command : commandArrayList) {
-            commandNamesArrayList.add(command.getName());
-        }
+        playerAdapter.setData(onlinePlayers);
+        lv.setAdapter(playerAdapter);
     }
 
     /**
@@ -136,7 +112,7 @@ public class ServerControlPlayersFragment extends Fragment {
      * Updates the online players list to the current values
      */
     private void updateOnlinePlayers() {
-        new LoadOnlinePlayersTask(this, getActivity()).execute();
+        loadOnlinePlayers();
     }
 
     /**
@@ -148,13 +124,13 @@ public class ServerControlPlayersFragment extends Fragment {
         LayoutInflater factory = LayoutInflater.from(this.getActivity());
         final View dialogView = factory.inflate(R.layout.dialog_edit_text_spinner, null);
         AppCompatSpinner s = (AppCompatSpinner) dialogView.findViewById(R.id.playerSpinner);
-        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, commandNamesArrayList); //selected item will look like a spinner set from XML
+        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, CommandProvider.playerCommandNamesArrayList); //selected item will look like a spinner set from XML
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         s.setAdapter(spinnerArrayAdapter);
         s.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                String selected = playerCommands.getCommands().get(position).getCommand();
+                String selected = CommandProvider.playerCommands.getCommands().get(position).getCommand();
                 EditText et = (EditText) dialogView.findViewById(R.id.playerParams);
                 if (selected.contains("<")) {
                     String[] split = selected.split("(?=<.*>)", 3);
@@ -182,10 +158,10 @@ public class ServerControlPlayersFragment extends Fragment {
                     public void onClick(DialogInterface dialog, int which) {
                         AppCompatSpinner spinner = (AppCompatSpinner) dialogView.findViewById(R.id.playerSpinner);
                         EditText editText = (EditText) dialogView.findViewById(R.id.playerParams);
-                        String commandString = playerCommands.getCommands().get(spinner.getSelectedItemPosition()).getCommand();
+                        String commandString = CommandProvider.playerCommands.getCommands().get(spinner.getSelectedItemPosition()).getCommand();
                         commandString = commandString.split("<player>", 2)[0];
                         commandString = commandString + player + " " + editText.getText().toString();
-                        new ExecuteCommandTask(getActivity(), getView(), ((ServerControlActivity) getActivity()).getClickListener()).execute(commandString);
+                        executeCommand(commandString);
                     }
                 })
                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
@@ -211,6 +187,6 @@ public class ServerControlPlayersFragment extends Fragment {
      * @return The adapter
      */
     public ArrayAdapter<String> getAdapter() {
-        return adapter;
+        return playerAdapter;
     }
 }

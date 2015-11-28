@@ -1,4 +1,4 @@
-package cz.boosik.boosadminforminecraft.app.adapters;
+package cz.boosik.boosadminforminecraft.app.view.adapters;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import cz.boosik.boosadminforminecraft.app.R;
-import cz.boosik.boosadminforminecraft.app.serverStore.Server;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,10 +38,18 @@ public class CardArrayStringAdapter extends ArrayAdapter<String> {
         this.cardList = strings;
     }
 
+    public CardArrayStringAdapter(Context context, int textViewResourceId) {
+        super(context, textViewResourceId);
+    }
+
     @Override
     public void add(String object) {
         cardList.add(object);
         super.add(object);
+    }
+
+    public void setData(List<String> strings) {
+        this.cardList = strings;
     }
 
     @Override

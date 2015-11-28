@@ -1,4 +1,4 @@
-package cz.boosik.boosadminforminecraft.app.components;
+package cz.boosik.boosadminforminecraft.app.view.components;
 
 import android.content.Context;
 import android.support.v4.view.ViewPager;

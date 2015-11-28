@@ -1,7 +1,6 @@
 package cz.boosik.boosadminforminecraft.app.fragments;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +18,7 @@ import cz.boosik.boosadminforminecraft.app.activities.ServerControlActivity;
  *
  * @author jakub.kolar@bsc-ideas.com
  */
-public class ServerControlDynmapFragment extends Fragment {
+public class ServerControlDynmapFragment extends AbstractServerControlFragment {
 
     @Bind(R.id.wvDynmap)
     WebView wvDynmap;
@@ -81,10 +80,10 @@ public class ServerControlDynmapFragment extends Fragment {
      */
     private String buildUrl() {
         String url;
-        if (((ServerControlActivity) getActivity()).getServer().getDynmapPort().isEmpty()) {
-            url = ((ServerControlActivity) getActivity()).getServer().getDynmapHost();
+        if (selectedServer.getDynmapPort().isEmpty()) {
+            url = selectedServer.getDynmapHost();
         } else {
-            url = ((ServerControlActivity) getActivity()).getServer().getDynmapHost() + ":" + ((ServerControlActivity) getActivity()).getServer().getDynmapPort();
+            url = selectedServer.getDynmapHost() + ":" + selectedServer.getDynmapPort();
         }
         if (url.startsWith("https://")) url = url.replace("https://", "http://");
         if (!url.startsWith("http://")) url = "http://" + url;

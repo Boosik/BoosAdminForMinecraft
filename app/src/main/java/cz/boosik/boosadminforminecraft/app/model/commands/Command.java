@@ -1,4 +1,4 @@
-package cz.boosik.boosadminforminecraft.app.commands;
+package cz.boosik.boosadminforminecraft.app.model.commands;
 
 /**
  * POJO representing the command

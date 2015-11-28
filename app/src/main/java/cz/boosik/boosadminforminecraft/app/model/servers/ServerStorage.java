@@ -1,4 +1,4 @@
-package cz.boosik.boosadminforminecraft.app.serverStore;
+package cz.boosik.boosadminforminecraft.app.model.servers;
 
 import java.util.ArrayList;
 

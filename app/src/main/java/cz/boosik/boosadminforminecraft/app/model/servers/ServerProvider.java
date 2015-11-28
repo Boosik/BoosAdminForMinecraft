@@ -1,4 +1,4 @@
-package cz.boosik.boosadminforminecraft.app.serverStore;
+package cz.boosik.boosadminforminecraft.app.model.servers;
 
 import android.content.Context;
 import com.google.gson.Gson;
@@ -10,7 +10,7 @@ import java.io.*;
  *
  * @author jakub.kolar@bsc-ideas.com
  */
-public class StorageProvider {
+public class ServerProvider {
 
     private String fileName;
     private final Context context;
@@ -21,7 +21,7 @@ public class StorageProvider {
      * @param context  Context of storage provider
      * @param fileName Name of the file to work with
      */
-    public StorageProvider(Context context, String fileName) {
+    public ServerProvider(Context context, String fileName) {
         this.fileName = fileName;
         this.context = context;
     }

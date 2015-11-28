@@ -8,10 +8,9 @@ import android.view.Menu;
 import android.view.View;
 import com.google.rconclient.rcon.RCon;
 import cz.boosik.boosadminforminecraft.app.R;
-import cz.boosik.boosadminforminecraft.app.asyncTasks.ExecuteCommandTask;
-import cz.boosik.boosadminforminecraft.app.asyncTasks.LoadOnlinePlayersTask;
+import cz.boosik.boosadminforminecraft.app.tasks.CheckQueryTask;
+import cz.boosik.boosadminforminecraft.app.tasks.CheckRconTask;
 import query.MCQuery;
-import cz.boosik.boosadminforminecraft.app.serverStore.Server;
 
 /**
  * Activity of server list
@@ -21,14 +20,14 @@ import cz.boosik.boosadminforminecraft.app.serverStore.Server;
 public class ServerListActivity extends AppCompatActivity {
 
     private Snackbar snackbar;
-    private RCon rcon = null;
     private String selected;
-    private MCQuery mcQuery;
     private final View.OnClickListener clickListener = new View.OnClickListener() {
         public void onClick(View v) {
             snackbar.dismiss();
         }
     };
+    public static MCQuery query;
+    public static RCon rcon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,22 +43,6 @@ public class ServerListActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         return false;
-    }
-
-    /**
-     * Executes example command on the server to see if it is online
-     *
-     * @param server Server to check
-     */
-    public void checkRcon(Server server) {
-        new ExecuteCommandTask(this, server).execute("list");
-    }
-
-    /**
-     * Attempts to get data using server query to check if the target server is online
-     */
-    public void checkQuery() {
-        new LoadOnlinePlayersTask(this).execute();
     }
 
     /**
@@ -89,32 +72,7 @@ public class ServerListActivity extends AppCompatActivity {
         }
     }
 
-    /**
-     * Starts the server control activity for the selected server
-     */
-    public void connect() {
-        Intent i = new Intent(this, ServerControlActivity.class);
-        i.putExtra("serverName", selected);
-        startActivity(i);
-    }
 
-    /**
-     * Gets the rcon
-     *
-     * @return The rcon
-     */
-    public RCon getRcon() {
-        return rcon;
-    }
-
-    /**
-     * Sets the rcon
-     *
-     * @param rcon The rcon
-     */
-    public void setRcon(RCon rcon) {
-        this.rcon = rcon;
-    }
 
     /**
      * Sets the selected
@@ -125,21 +83,21 @@ public class ServerListActivity extends AppCompatActivity {
         this.selected = selected;
     }
 
-    /**
-     * Gets the mcQuery
-     *
-     * @return The mcQuery
-     */
-    public MCQuery getMcQuery() {
-        return mcQuery;
+    public void checkRcon() {
+        new CheckRconTask(this).execute();
+    }
+
+    public void checkQuery() {
+        new CheckQueryTask(this).execute();
     }
 
     /**
-     * Sets the mcQuery
-     *
-     * @param mcQuery The mcQuery
+     * Starts the server control activity for the selected server
      */
-    public void setMcQuery(MCQuery mcQuery) {
-        this.mcQuery = mcQuery;
+    public void connect() {
+        System.out.println("Connect");
+        Intent i = new Intent(this, ServerControlActivity.class);
+        i.putExtra("serverName", selected);
+        startActivity(i);
     }
 }
