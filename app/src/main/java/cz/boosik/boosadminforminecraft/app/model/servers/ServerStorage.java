@@ -11,6 +11,11 @@ public class ServerStorage {
 
     private ArrayList<Server> servers = new ArrayList<Server>();
 
+    /**
+     * Gets servers
+     *
+     * @return The servers
+     */
     public ArrayList<Server> getServers() {
         return servers;
     }

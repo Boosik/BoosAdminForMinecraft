@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+@SuppressWarnings("JavaDoc")
 public class QueryRequest {
     private ByteArrayOutputStream byteStream;
     private DataOutputStream dataStream;

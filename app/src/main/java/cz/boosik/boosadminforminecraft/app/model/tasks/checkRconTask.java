@@ -1,15 +1,15 @@
-package cz.boosik.boosadminforminecraft.app.tasks;
+package cz.boosik.boosadminforminecraft.app.model.tasks;
 
 import android.content.Context;
 import android.os.AsyncTask;
 import com.google.rconclient.rcon.AuthenticationException;
 import com.google.rconclient.rcon.RCon;
-import cz.boosik.boosadminforminecraft.app.activities.ServerListActivity;
+import cz.boosik.boosadminforminecraft.app.presenter.activities.ServerListActivity;
 
 import java.io.IOException;
 
-import static cz.boosik.boosadminforminecraft.app.fragments.AbstractServerFragment.selectedServer;
-import static cz.boosik.boosadminforminecraft.app.activities.ServerListActivity.rcon;
+import static cz.boosik.boosadminforminecraft.app.presenter.fragments.AbstractServerFragment.selectedServer;
+import static cz.boosik.boosadminforminecraft.app.presenter.activities.ServerListActivity.rcon;
 
 /**
  * @author jakub.kolar@bsc-ideas.com
@@ -18,6 +18,11 @@ public class CheckRconTask extends AsyncTask<Void, Void, String> {
 
     private Context context;
 
+    /**
+     * Default constructor
+     *
+     * @param context The context
+     */
     public CheckRconTask(Context context) {
         this.context = context;
     }
@@ -40,7 +45,7 @@ public class CheckRconTask extends AsyncTask<Void, Void, String> {
 
     @Override
     protected void onPostExecute(String result) {
-        ServerListActivity activity = (ServerListActivity)context;
+        ServerListActivity activity = (ServerListActivity) context;
         if (result == null) {
             activity.invokeError("query");
             return;

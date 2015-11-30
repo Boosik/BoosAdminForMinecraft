@@ -22,6 +22,9 @@ public class CardArrayStringAdapter extends ArrayAdapter<String> {
     private static final String TAG = "CardArrayServerAdapter";
     private List<String> cardList = new ArrayList<>();
 
+    /**
+     * View Holder
+     */
     static class CardViewHolder {
         TextView line1;
     }
@@ -38,6 +41,12 @@ public class CardArrayStringAdapter extends ArrayAdapter<String> {
         this.cardList = strings;
     }
 
+    /**
+     * Constructor without data
+     *
+     * @param context            Context of adapter
+     * @param textViewResourceId Textview Id
+     */
     public CardArrayStringAdapter(Context context, int textViewResourceId) {
         super(context, textViewResourceId);
     }
@@ -48,6 +57,11 @@ public class CardArrayStringAdapter extends ArrayAdapter<String> {
         super.add(object);
     }
 
+    /**
+     * Sets the data
+     *
+     * @param strings The data
+     */
     public void setData(List<String> strings) {
         this.cardList = strings;
     }

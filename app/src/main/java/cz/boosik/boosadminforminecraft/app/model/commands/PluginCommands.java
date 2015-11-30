@@ -36,10 +36,20 @@ public enum PluginCommands {
 
     private final String commandString;
 
+    /**
+     * Default constructor
+     *
+     * @param commandString The commandString
+     */
     PluginCommands(final String commandString) {
         this.commandString = commandString;
     }
 
+    /**
+     * Gets the commandString
+     *
+     * @return The commandString
+     */
     public String getCommandString() {
         return commandString;
     }

@@ -19,10 +19,20 @@ public enum PlayerCommands {
 
     private final String commandString;
 
+    /**
+     * Default constructor
+     *
+     * @param commandString The commandString
+     */
     PlayerCommands(final String commandString) {
         this.commandString = commandString;
     }
 
+    /**
+     * Returns the commandString
+     *
+     * @return The commandString
+     */
     public String getCommandString() {
         return commandString;
     }

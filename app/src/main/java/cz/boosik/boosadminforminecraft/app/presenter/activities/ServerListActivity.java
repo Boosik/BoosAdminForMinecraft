@@ -1,4 +1,4 @@
-package cz.boosik.boosadminforminecraft.app.activities;
+package cz.boosik.boosadminforminecraft.app.presenter.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,8 +8,8 @@ import android.view.Menu;
 import android.view.View;
 import com.google.rconclient.rcon.RCon;
 import cz.boosik.boosadminforminecraft.app.R;
-import cz.boosik.boosadminforminecraft.app.tasks.CheckQueryTask;
-import cz.boosik.boosadminforminecraft.app.tasks.CheckRconTask;
+import cz.boosik.boosadminforminecraft.app.model.tasks.CheckQueryTask;
+import cz.boosik.boosadminforminecraft.app.model.tasks.CheckRconTask;
 import query.MCQuery;
 
 /**
@@ -73,7 +73,6 @@ public class ServerListActivity extends AppCompatActivity {
     }
 
 
-
     /**
      * Sets the selected
      *
@@ -83,10 +82,16 @@ public class ServerListActivity extends AppCompatActivity {
         this.selected = selected;
     }
 
+    /**
+     * Checks rcon connection
+     */
     public void checkRcon() {
         new CheckRconTask(this).execute();
     }
 
+    /**
+     * Checks query connection
+     */
     public void checkQuery() {
         new CheckQueryTask(this).execute();
     }

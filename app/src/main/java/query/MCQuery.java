@@ -7,6 +7,7 @@ import java.net.*;
  *
  * @author Ryan McCann
  */
+@SuppressWarnings("JavaDoc")
 public class MCQuery {
     final static byte HANDSHAKE = 9;
     final static byte STAT = 0;
@@ -153,11 +154,6 @@ public class MCQuery {
 		 * TODO: increment each time, or use a random int
 		 */
         return 1;
-    }
-
-    @Override
-    public void finalize() {
-        socket.close();
     }
 
     //debug

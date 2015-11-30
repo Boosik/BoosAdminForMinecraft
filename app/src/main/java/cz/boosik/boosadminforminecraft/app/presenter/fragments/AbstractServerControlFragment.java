@@ -1,13 +1,14 @@
-package cz.boosik.boosadminforminecraft.app.fragments;
+package cz.boosik.boosadminforminecraft.app.presenter.fragments;
 
 import android.content.Context;
+import android.util.Log;
 import com.google.rconclient.rcon.RCon;
 import cz.boosik.boosadminforminecraft.app.App;
 import cz.boosik.boosadminforminecraft.app.R;
-import cz.boosik.boosadminforminecraft.app.activities.ServerControlActivity;
-import cz.boosik.boosadminforminecraft.app.tasks.ExecuteCommandTask;
-import cz.boosik.boosadminforminecraft.app.tasks.LoadOnlinePlayersTask;
-import cz.boosik.boosadminforminecraft.app.tasks.LoadPluginsTask;
+import cz.boosik.boosadminforminecraft.app.model.tasks.ExecuteCommandTask;
+import cz.boosik.boosadminforminecraft.app.model.tasks.LoadOnlinePlayersTask;
+import cz.boosik.boosadminforminecraft.app.model.tasks.LoadPluginsTask;
+import cz.boosik.boosadminforminecraft.app.presenter.activities.ServerControlActivity;
 import cz.boosik.boosadminforminecraft.app.view.adapters.CardArrayStringAdapter;
 import query.MCQuery;
 
@@ -25,6 +26,9 @@ public abstract class AbstractServerControlFragment extends AbstractServerFragme
     public static RCon rcon;
     public static MCQuery query;
 
+    /**
+     * Initializes query object
+     */
     protected void initializeQuery() {
         try {
             query = new MCQuery(selectedServer.getQueryHost(), Integer.valueOf(selectedServer.getQueryPort()));
@@ -33,15 +37,28 @@ public abstract class AbstractServerControlFragment extends AbstractServerFragme
         }
     }
 
+    /**
+     * Executes command
+     * @param commandString command to be executed
+     */
     protected void executeCommand(String commandString) {
+        Log.i("executeCommand", "ExecuteCommandTask - " + selectedServer.getHost() + selectedServer.getPort());
         new ExecuteCommandTask(getActivity(), getView(), ((ServerControlActivity) getActivity()).getClickListener()).execute(commandString);
     }
 
+    /**
+     * Loads online players
+     */
     protected void loadOnlinePlayers() {
+        Log.i("loadOnlinePlayers", "LoadOnlinePlayersTask - " + selectedServer.getQueryHost() + Integer.valueOf(selectedServer.getQueryPort()));
         new LoadOnlinePlayersTask(this, getActivity()).execute();
     }
 
+    /**
+     * Loads plugins
+     */
     protected void loadPlugins() {
+        Log.i("loadPlugins", "LoadPluginsTask - " + selectedServer.getQueryHost() + Integer.valueOf(selectedServer.getQueryPort()));
         new LoadPluginsTask(this).execute();
     }
 }

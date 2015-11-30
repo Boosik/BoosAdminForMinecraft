@@ -20,6 +20,7 @@ import java.util.Random;
  *
  * @author vincent
  */
+@SuppressWarnings("JavaDoc")
 public class RCon {
 
     /**

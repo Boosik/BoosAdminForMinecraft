@@ -1,4 +1,4 @@
-package cz.boosik.boosadminforminecraft.app.activities;
+package cz.boosik.boosadminforminecraft.app.presenter.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;

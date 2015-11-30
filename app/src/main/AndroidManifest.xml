@@ -12,7 +12,7 @@
             android:largeHeap="true"
             android:name=".App">
         <activity
-                android:name=".activities.ServerListActivity"
+                android:name=".presenter.activities.ServerListActivity"
                 android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -20,20 +20,20 @@
             </intent-filter>
         </activity>
         <activity
-                android:name=".activities.ServerAddActivity"
+                android:name=".presenter.activities.ServerAddActivity"
                 android:label="@string/app_name"
-                android:parentActivityName=".activities.ServerListActivity">
+                android:parentActivityName=".presenter.activities.ServerListActivity">
             <meta-data
                     android:name="android.support.PARENT_ACTIVITY"
-                    android:value="cz.boosik.boosadminforminecraft.app.activities.ServerListActivity"/>
+                    android:value=".presenter.activities.ServerListActivity"/>
         </activity>
         <activity
-                android:name=".activities.ServerControlActivity"
+                android:name=".presenter.activities.ServerControlActivity"
                 android:label="@string/app_name"
-                android:parentActivityName=".activities.ServerListActivity">
+                android:parentActivityName=".presenter.activities.ServerListActivity">
             <meta-data
                     android:name="android.support.PARENT_ACTIVITY"
-                    android:value="cz.boosik.boosadminforminecraft.app.activities.ServerListActivity"/>
+                    android:value=".presenter.activities.ServerListActivity"/>
         </activity>
     </application>
 

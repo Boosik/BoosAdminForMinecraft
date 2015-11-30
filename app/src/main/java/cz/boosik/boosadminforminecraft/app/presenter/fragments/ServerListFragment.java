@@ -1,4 +1,4 @@
-package cz.boosik.boosadminforminecraft.app.fragments;
+package cz.boosik.boosadminforminecraft.app.presenter.fragments;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -12,8 +12,8 @@ import android.widget.TextView;
 import butterknife.*;
 import com.melnykov.fab.FloatingActionButton;
 import cz.boosik.boosadminforminecraft.app.R;
-import cz.boosik.boosadminforminecraft.app.activities.ServerAddActivity;
-import cz.boosik.boosadminforminecraft.app.activities.ServerListActivity;
+import cz.boosik.boosadminforminecraft.app.presenter.activities.ServerAddActivity;
+import cz.boosik.boosadminforminecraft.app.presenter.activities.ServerListActivity;
 import cz.boosik.boosadminforminecraft.app.model.servers.Server;
 import cz.boosik.boosadminforminecraft.app.model.servers.ServerProvider;
 import cz.boosik.boosadminforminecraft.app.model.servers.ServerStorage;
@@ -24,7 +24,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import static cz.boosik.boosadminforminecraft.app.activities.ServerListActivity.query;
+import static cz.boosik.boosadminforminecraft.app.presenter.activities.ServerListActivity.query;
 
 /**
  * Fragment used to display servers list
@@ -54,6 +54,11 @@ public class ServerListFragment extends AbstractServerFragment {
         return view;
     }
 
+    /**
+     * Server lick click listener
+     *
+     * @param position position of clicked server
+     */
     @OnItemClick(R.id.server_list)
     public void onItemClick(int position) {
         selectedServer = (Server) lv.getItemAtPosition(position);
@@ -62,15 +67,24 @@ public class ServerListFragment extends AbstractServerFragment {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        ((ServerListActivity)getActivity()).checkRcon();
+        ((ServerListActivity) getActivity()).checkRcon();
     }
 
+    /**
+     * Server long click listener
+     *
+     * @param position Position of long clicked server
+     * @return true
+     */
     @OnItemLongClick(R.id.server_list)
     public boolean onItemLongClick(int position) {
         showDeleteDialog(position);
         return true;
     }
 
+    /**
+     * Floating action button listener
+     */
     @OnClick(R.id.fab)
     public void onFabClick() {
         Intent i = new Intent(getActivity(), ServerAddActivity.class);

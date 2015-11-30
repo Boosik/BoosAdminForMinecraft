@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+@SuppressWarnings("JavaDoc")
 public class QueryResponse {
     static byte NULL = 00;
     static byte SPACE = 20;

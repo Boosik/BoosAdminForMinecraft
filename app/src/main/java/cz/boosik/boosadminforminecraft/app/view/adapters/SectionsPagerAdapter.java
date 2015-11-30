@@ -5,10 +5,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import cz.boosik.boosadminforminecraft.app.R;
-import cz.boosik.boosadminforminecraft.app.fragments.ServerControlDynmapFragment;
-import cz.boosik.boosadminforminecraft.app.fragments.ServerControlPlayersFragment;
-import cz.boosik.boosadminforminecraft.app.fragments.ServerControlPluginsFragment;
-import cz.boosik.boosadminforminecraft.app.fragments.ServerControlServerFragment;
+import cz.boosik.boosadminforminecraft.app.presenter.fragments.ServerControlDynmapFragment;
+import cz.boosik.boosadminforminecraft.app.presenter.fragments.ServerControlPlayersFragment;
+import cz.boosik.boosadminforminecraft.app.presenter.fragments.ServerControlPluginsFragment;
+import cz.boosik.boosadminforminecraft.app.presenter.fragments.ServerControlServerFragment;
 
 import java.util.Locale;
 
@@ -24,8 +24,9 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
     /**
      * Default constructor for sections adapter
+     *
      * @param context Context of adapter
-     * @param fm Fragment manager
+     * @param fm      Fragment manager
      */
     public SectionsPagerAdapter(Context context, FragmentManager fm) {
         super(fm);
@@ -52,6 +53,11 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         return count;
     }
 
+    /**
+     * Sets the tab count
+     *
+     * @param count The count
+     */
     public void setCount(int count) {
         this.count = count;
     }

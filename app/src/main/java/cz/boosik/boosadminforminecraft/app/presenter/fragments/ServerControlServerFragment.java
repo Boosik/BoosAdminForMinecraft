@@ -1,4 +1,4 @@
-package cz.boosik.boosadminforminecraft.app.fragments;
+package cz.boosik.boosadminforminecraft.app.presenter.fragments;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -44,7 +44,11 @@ public class ServerControlServerFragment extends AbstractServerControlFragment {
     }
 
 
-
+    /**
+     * Command click listener
+     *
+     * @param position Position of clicked command
+     */
     @OnItemClick(R.id.server_command_list)
     public void onItemClick(int position) {
         String commandString = CommandProvider.serverCommands.getCommands().get(position).getCommand();

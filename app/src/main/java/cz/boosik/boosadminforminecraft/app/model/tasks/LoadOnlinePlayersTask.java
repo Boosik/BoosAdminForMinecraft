@@ -1,13 +1,15 @@
-package cz.boosik.boosadminforminecraft.app.tasks;
+package cz.boosik.boosadminforminecraft.app.model.tasks;
 
 import android.content.Context;
 import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
-import cz.boosik.boosadminforminecraft.app.activities.ServerControlActivity;
-import cz.boosik.boosadminforminecraft.app.fragments.ServerControlPlayersFragment;
+import android.util.Log;
+import cz.boosik.boosadminforminecraft.app.presenter.activities.ServerControlActivity;
+import cz.boosik.boosadminforminecraft.app.presenter.fragments.ServerControlPlayersFragment;
+import query.MCQuery;
 import query.QueryResponse;
 
-import static cz.boosik.boosadminforminecraft.app.fragments.AbstractServerControlFragment.query;
+import static cz.boosik.boosadminforminecraft.app.presenter.fragments.AbstractServerControlFragment.*;
 
 /**
  * Async task used to load online players from the server query
@@ -32,8 +34,16 @@ public class LoadOnlinePlayersTask extends AsyncTask<Void, Void, QueryResponse> 
 
     @Override
     protected QueryResponse doInBackground(Void... params) {
+        Log.i("LoadOnlinePlayersTask", "start - " + selectedServer.getQueryHost() + Integer.valueOf(selectedServer.getQueryPort()));
         try {
-                return query.fullStat();
+            if (query == null) {
+                try {
+                    query = new MCQuery(selectedServer.getQueryHost(), Integer.valueOf(selectedServer.getQueryPort()));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            return query.fullStat();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -42,7 +52,8 @@ public class LoadOnlinePlayersTask extends AsyncTask<Void, Void, QueryResponse> 
 
     @Override
     protected void onPostExecute(QueryResponse response) {
-        ServerControlPlayersFragment fr = (ServerControlPlayersFragment)fragment;
+        Log.i("LoadOnlinePlayersTask", "end - " + selectedServer.getQueryHost() + Integer.valueOf(selectedServer.getQueryPort()));
+        ServerControlPlayersFragment fr = (ServerControlPlayersFragment) fragment;
         if (response == null) {
             ((ServerControlActivity) context).invokeError("query");
             return;

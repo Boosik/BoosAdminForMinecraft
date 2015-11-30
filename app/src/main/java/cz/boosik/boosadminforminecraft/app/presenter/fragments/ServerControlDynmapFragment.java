@@ -1,4 +1,4 @@
-package cz.boosik.boosadminforminecraft.app.fragments;
+package cz.boosik.boosadminforminecraft.app.presenter.fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,7 +11,7 @@ import android.webkit.WebViewClient;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import cz.boosik.boosadminforminecraft.app.R;
-import cz.boosik.boosadminforminecraft.app.activities.ServerControlActivity;
+import cz.boosik.boosadminforminecraft.app.presenter.activities.ServerControlActivity;
 
 /**
  * Fragment used to display dynamic map

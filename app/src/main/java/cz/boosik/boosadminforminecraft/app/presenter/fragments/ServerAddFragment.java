@@ -1,4 +1,4 @@
-package cz.boosik.boosadminforminecraft.app.fragments;
+package cz.boosik.boosadminforminecraft.app.presenter.fragments;
 
 
 import android.content.Intent;
@@ -15,7 +15,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cz.boosik.boosadminforminecraft.app.R;
-import cz.boosik.boosadminforminecraft.app.activities.ServerListActivity;
+import cz.boosik.boosadminforminecraft.app.presenter.activities.ServerListActivity;
 import cz.boosik.boosadminforminecraft.app.model.servers.Server;
 import cz.boosik.boosadminforminecraft.app.model.servers.ServerProvider;
 
@@ -53,6 +53,9 @@ public class ServerAddFragment extends Fragment {
         return view;
     }
 
+    /**
+     * Saves the server
+     */
     @OnClick(R.id.btSave)
     public void saveServer() {
         String serverName = etServerName.getText().toString();

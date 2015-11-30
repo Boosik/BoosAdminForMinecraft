@@ -1,4 +1,4 @@
-package cz.boosik.boosadminforminecraft.app.activities;
+package cz.boosik.boosadminforminecraft.app.presenter.activities;
 
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
@@ -20,7 +20,7 @@ import cz.boosik.boosadminforminecraft.app.view.components.CustomViewPager;
 
 import java.io.FileNotFoundException;
 
-import static cz.boosik.boosadminforminecraft.app.fragments.AbstractServerControlFragment.selectedServer;
+import static cz.boosik.boosadminforminecraft.app.presenter.fragments.AbstractServerControlFragment.selectedServer;
 
 /**
  * Activity of server control

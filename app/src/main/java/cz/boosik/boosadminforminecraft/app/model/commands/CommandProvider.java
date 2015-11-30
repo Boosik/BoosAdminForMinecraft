@@ -34,7 +34,7 @@ public class CommandProvider {
         serverCommandNamesArrayList = new ArrayList<>();
         ArrayList<Command> commandArrayList = new ArrayList<>();
         commandArrayList.add(0, new Command(App.getContext().getString(R.string.custom_command), "<custom_command>"));
-        for (BaseCommands bc : BaseCommands.values()) {
+        for (ServerCommands bc : ServerCommands.values()) {
             commandArrayList.add(new Command(bc.name().toLowerCase().replace("_", " "), bc.getCommandString()));
         }
         serverCommands.setCommands(commandArrayList);

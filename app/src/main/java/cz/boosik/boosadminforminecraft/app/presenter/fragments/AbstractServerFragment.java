@@ -1,4 +1,4 @@
-package cz.boosik.boosadminforminecraft.app.fragments;
+package cz.boosik.boosadminforminecraft.app.presenter.fragments;
 
 import android.support.v4.app.Fragment;
 import cz.boosik.boosadminforminecraft.app.model.servers.Server;

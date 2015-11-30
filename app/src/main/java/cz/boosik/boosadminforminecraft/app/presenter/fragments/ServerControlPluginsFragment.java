@@ -1,4 +1,4 @@
-package cz.boosik.boosadminforminecraft.app.fragments;
+package cz.boosik.boosadminforminecraft.app.presenter.fragments;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -20,30 +20,31 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Fragment used to display online players list
+ * Fragment used to display supported plugins
  *
  * @author jakub.kolar@bsc-ideas.com
  */
-public class ServerControlPlayersFragment extends AbstractServerControlFragment {
+public class ServerControlPluginsFragment extends AbstractServerControlFragment {
 
     @Bind(R.id.player_command_list)
     ListView lv;
-    @Bind(R.id.players_refresher)
+    @Bind(R.id.plugins_refresher)
     SwipeRefreshLayout swipeView;
 
     private static final String ARG_SECTION_NUMBER = "section_number";
-    private List<String> onlinePlayers;
+    private List<String> plugins = new ArrayList<>();
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_server_control_players, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_server_control_plugins, container, false);
         ButterKnife.bind(this, rootView);
         if (query == null) {
             initializeQuery();
         }
-        prepareOnlineList();
-        updateOnlinePlayers();
+        preparePluginsList();
+        updatePlugins();
         prepareView();
         return rootView;
     }
@@ -54,26 +55,30 @@ public class ServerControlPlayersFragment extends AbstractServerControlFragment 
      * @param sectionNumber Section number in pager
      * @return Instance of this fragment with set section number
      */
-    public static ServerControlPlayersFragment newInstance(int sectionNumber) {
-        ServerControlPlayersFragment fragment = new ServerControlPlayersFragment();
+    public static ServerControlPluginsFragment newInstance(int sectionNumber) {
+        ServerControlPluginsFragment fragment = new ServerControlPluginsFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
         fragment.setArguments(args);
         return fragment;
     }
 
+    /**
+     * Plugin click listener
+     *
+     * @param position Position of clicked plugin
+     */
     @OnItemClick(R.id.player_command_list)
     public void onItemClick(int position) {
-        preparePlayerDialog(onlinePlayers.get(position));
+        preparePlayerDialog(plugins.get(position));
     }
 
     /**
-     * Prepares the list of online players
+     * Prepares the list of plugins
      */
-    private void prepareOnlineList() {
-        onlinePlayers = new ArrayList<>();
-        playerAdapter.setData(onlinePlayers);
-        lv.setAdapter(playerAdapter);
+    private void preparePluginsList() {
+        pluginAdapter.setData(plugins);
+        lv.setAdapter(pluginAdapter);
     }
 
     /**
@@ -87,7 +92,7 @@ public class ServerControlPlayersFragment extends AbstractServerControlFragment 
                 (new Handler()).postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        updateOnlinePlayers();
+                        updatePlugins();
                         swipeView.setRefreshing(false);
                     }
                 }, 3000);
@@ -109,36 +114,35 @@ public class ServerControlPlayersFragment extends AbstractServerControlFragment 
     }
 
     /**
-     * Updates the online players list to the current values
+     * Updates the plugins list to the current values
      */
-    private void updateOnlinePlayers() {
-        loadOnlinePlayers();
+    private void updatePlugins() {
+        loadPlugins();
     }
 
     /**
-     * Prepares the dialog that is shown on player name click
+     * Prepares the dialog that is shown on plugin name click
      *
-     * @param player Clicked player
+     * @param plugin Clicked plugin
      */
-    private void preparePlayerDialog(final String player) {
+    private void preparePlayerDialog(final String plugin) {
         LayoutInflater factory = LayoutInflater.from(this.getActivity());
         final View dialogView = factory.inflate(R.layout.dialog_edit_text_spinner, null);
         AppCompatSpinner s = (AppCompatSpinner) dialogView.findViewById(R.id.playerSpinner);
-        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, CommandProvider.playerCommandNamesArrayList); //selected item will look like a spinner set from XML
+        final List<String> pluginCommands = CommandProvider.pluginCommandsMap.get(plugin.trim().split("[ ]", 2)[0].toLowerCase());
+        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, pluginCommands);
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         s.setAdapter(spinnerArrayAdapter);
         s.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                String selected = CommandProvider.playerCommands.getCommands().get(position).getCommand();
+                String selected = pluginCommands.get(position);
                 EditText et = (EditText) dialogView.findViewById(R.id.playerParams);
                 if (selected.contains("<")) {
-                    String[] split = selected.split("(?=<.*>)", 3);
-                    if (split.length > 2) {
+                    String[] split = selected.split("(?=<.*>)", 2);
+                    if (split.length > 1) {
                         et.setVisibility(View.VISIBLE);
-                        et.setHint(split[2]);
-                    } else {
-                        et.setVisibility(View.GONE);
+                        et.setHint(split[1]);
                     }
                 } else {
                     et.setVisibility(View.GONE);
@@ -152,15 +156,15 @@ public class ServerControlPlayersFragment extends AbstractServerControlFragment 
         });
         new AlertDialog.Builder(getActivity())
                 .setView(dialogView)
-                .setTitle(player)
+                .setTitle(plugin)
                 .setMessage(R.string.dialog_player)
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         AppCompatSpinner spinner = (AppCompatSpinner) dialogView.findViewById(R.id.playerSpinner);
                         EditText editText = (EditText) dialogView.findViewById(R.id.playerParams);
-                        String commandString = CommandProvider.playerCommands.getCommands().get(spinner.getSelectedItemPosition()).getCommand();
-                        commandString = commandString.split("<player>", 2)[0];
-                        commandString = commandString + player + " " + editText.getText().toString();
+                        String commandString = pluginCommands.get(spinner.getSelectedItemPosition());
+                        commandString = commandString.split("<.*>", 2)[0];
+                        commandString = commandString + " " + editText.getText().toString();
                         executeCommand(commandString);
                     }
                 })
@@ -173,12 +177,12 @@ public class ServerControlPlayersFragment extends AbstractServerControlFragment 
     }
 
     /**
-     * Gets the onlinePlayers
+     * Gets the plugins
      *
-     * @return The onlinePlayers
+     * @return The plugins
      */
-    public List<String> getOnlinePlayers() {
-        return onlinePlayers;
+    public List<String> getPlugins() {
+        return plugins;
     }
 
     /**
@@ -187,6 +191,6 @@ public class ServerControlPlayersFragment extends AbstractServerControlFragment 
      * @return The adapter
      */
     public ArrayAdapter<String> getAdapter() {
-        return playerAdapter;
+        return pluginAdapter;
     }
 }

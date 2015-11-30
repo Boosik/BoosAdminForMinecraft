@@ -23,6 +23,9 @@ public class CardArrayServerAdapter extends ArrayAdapter<Server> {
     private static final String TAG = "CardArrayServerAdapter";
     private List<Server> cardList = new ArrayList<>();
 
+    /**
+     * View Holder
+     */
     static class CardViewHolder {
         TextView line1;
         TextView line2;

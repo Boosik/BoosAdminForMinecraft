@@ -19,4 +19,27 @@
   <component name="ProjectType">
     <option name="id" value="Android" />
   </component>
+  <component name="UMLDiagramComponent">
+    <diagram name="app">
+      <command command-class="de.frag.umlplugin.uml.command.AddClassCommand" psi-class="cz.boosik.boosadminforminecraft.app.R" />
+      <command command-class="de.frag.umlplugin.uml.command.AddClassCommand" psi-class="cz.boosik.boosadminforminecraft.app.BuildConfig" />
+      <command command-class="de.frag.umlplugin.uml.command.AddClassCommand" psi-class="cz.boosik.boosadminforminecraft.app.App" />
+      <command command-class="de.frag.umlplugin.uml.command.AddClassCommand" psi-class="cz.boosik.boosadminforminecraft.app.ApplicationTest" />
+      <command command-class="de.frag.umlplugin.uml.command.ConnectClassesCommand" />
+      <command command-class="de.frag.umlplugin.uml.command.AddClassCommand" psi-class="cz.boosik.boosadminforminecraft.app.presenter.activities.ServerAddActivity" />
+      <command command-class="de.frag.umlplugin.uml.command.AddClassCommand" psi-class="cz.boosik.boosadminforminecraft.app.presenter.activities.ServerControlActivity" />
+      <command command-class="de.frag.umlplugin.uml.command.AddClassCommand" psi-class="cz.boosik.boosadminforminecraft.app.presenter.activities.ServerListActivity" />
+      <command command-class="de.frag.umlplugin.uml.command.AddClassCommand" psi-class="cz.boosik.boosadminforminecraft.app.presenter.fragments.AbstractServerControlFragment" />
+      <command command-class="de.frag.umlplugin.uml.command.AddClassCommand" psi-class="cz.boosik.boosadminforminecraft.app.presenter.fragments.AbstractServerFragment" />
+      <command command-class="de.frag.umlplugin.uml.command.AddClassCommand" psi-class="cz.boosik.boosadminforminecraft.app.presenter.fragments.ServerAddFragment" />
+      <command command-class="de.frag.umlplugin.uml.command.AddClassCommand" psi-class="cz.boosik.boosadminforminecraft.app.presenter.fragments.ServerControlDynmapFragment" />
+      <command command-class="de.frag.umlplugin.uml.command.AddClassCommand" psi-class="cz.boosik.boosadminforminecraft.app.presenter.fragments.ServerControlPlayersFragment" />
+      <command command-class="de.frag.umlplugin.uml.command.AddClassCommand" psi-class="cz.boosik.boosadminforminecraft.app.presenter.fragments.ServerControlPluginsFragment" />
+      <command command-class="de.frag.umlplugin.uml.command.AddClassCommand" psi-class="cz.boosik.boosadminforminecraft.app.presenter.fragments.ServerControlServerFragment" />
+      <command command-class="de.frag.umlplugin.uml.command.AddClassCommand" psi-class="cz.boosik.boosadminforminecraft.app.presenter.fragments.ServerListFragment" />
+      <command command-class="de.frag.umlplugin.uml.command.ConnectClassesCommand" />
+      <command command-class="de.frag.umlplugin.uml.command.ConnectSingleClassCommand" psi-class="cz.boosik.boosadminforminecraft.app.presenter.fragments.AbstractServerFragment" />
+      <compartment-visibility />
+    </diagram>
+  </component>
 </project>

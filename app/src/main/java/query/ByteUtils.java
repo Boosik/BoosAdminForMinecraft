@@ -9,6 +9,7 @@ import java.util.ArrayList;
  *
  * @author Ryan McCann
  */
+@SuppressWarnings("JavaDoc")
 public class ByteUtils {
     /**
      * Creates and returns a new array with the values of the original from index <code>a</code> to index <code>b</code>

@@ -5,7 +5,7 @@ package cz.boosik.boosadminforminecraft.app.model.commands;
  *
  * @author jakub.kolar@bsc-ideas.com
  */
-public enum BaseCommands {
+public enum ServerCommands {
     BANLIST("banlist players"),
     BANLIST_IP("banlist ips"),
     DEFAULT_GAME_MODE("defaultgamemode <gamemode>"),
@@ -33,10 +33,20 @@ public enum BaseCommands {
 
     private final String commandString;
 
-    BaseCommands(final String commandString) {
+    /**
+     * Default constructor
+     *
+     * @param commandString The commandString
+     */
+    ServerCommands(final String commandString) {
         this.commandString = commandString;
     }
 
+    /**
+     * Gets the commandString
+     *
+     * @return The commandString
+     */
     public String getCommandString() {
         return commandString;
     }

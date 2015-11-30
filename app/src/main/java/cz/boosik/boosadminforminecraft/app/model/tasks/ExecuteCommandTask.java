@@ -1,17 +1,18 @@
-package cz.boosik.boosadminforminecraft.app.tasks;
+package cz.boosik.boosadminforminecraft.app.model.tasks;
 
 import android.content.Context;
 import android.os.AsyncTask;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.View;
 import com.google.rconclient.rcon.AuthenticationException;
 import com.google.rconclient.rcon.RCon;
 import cz.boosik.boosadminforminecraft.app.R;
-import cz.boosik.boosadminforminecraft.app.activities.ServerControlActivity;
+import cz.boosik.boosadminforminecraft.app.presenter.activities.ServerControlActivity;
 
 import java.io.IOException;
 
-import static cz.boosik.boosadminforminecraft.app.fragments.AbstractServerControlFragment.*;
+import static cz.boosik.boosadminforminecraft.app.presenter.fragments.AbstractServerControlFragment.*;
 
 /**
  * Async task used for command execution using rcon
@@ -38,7 +39,13 @@ public class ExecuteCommandTask extends AsyncTask<String, Void, String> {
     }
 
     @Override
+    protected void onPreExecute() {
+        Log.i("ExecuteCommandTask", "preexecute - " + selectedServer.getHost() + ":" + selectedServer.getPort() + "context: " + context);
+    }
+
+    @Override
     protected String doInBackground(String... params) {
+        Log.i("ExecuteCommandTask", "start - " + selectedServer.getHost() + selectedServer.getPort());
         String response;
         try {
             if (rcon == null || rcon.isShutdown()) {
@@ -55,6 +62,7 @@ public class ExecuteCommandTask extends AsyncTask<String, Void, String> {
 
     @Override
     protected void onPostExecute(String result) {
+        Log.i("ExecuteCommandTask", "end - " + selectedServer.getHost() + selectedServer.getPort());
         ServerControlActivity activity = (ServerControlActivity) context;
         if (result == null) {
             activity.invokeError("rcon");

@@ -1,12 +1,14 @@
-package cz.boosik.boosadminforminecraft.app.tasks;
+package cz.boosik.boosadminforminecraft.app.model.tasks;
 
 import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
-import cz.boosik.boosadminforminecraft.app.fragments.ServerControlPluginsFragment;
+import android.util.Log;
+import cz.boosik.boosadminforminecraft.app.presenter.fragments.ServerControlPluginsFragment;
 import cz.boosik.boosadminforminecraft.app.model.commands.CommandProvider;
+import query.MCQuery;
 import query.QueryResponse;
 
-import static cz.boosik.boosadminforminecraft.app.fragments.AbstractServerControlFragment.query;
+import static cz.boosik.boosadminforminecraft.app.presenter.fragments.AbstractServerControlFragment.*;
 
 /**
  * Async task used to load installed plugins from the server query
@@ -20,6 +22,7 @@ public class LoadPluginsTask extends AsyncTask<Void, Void, QueryResponse> {
     /**
      * Default constructor
      *
+     * @param context The context
      */
     public LoadPluginsTask(Fragment context) {
         this.context = context;
@@ -27,7 +30,15 @@ public class LoadPluginsTask extends AsyncTask<Void, Void, QueryResponse> {
 
     @Override
     protected QueryResponse doInBackground(Void... params) {
+        Log.i("LoadPluginsTask", "start - " + selectedServer.getQueryHost() + Integer.valueOf(selectedServer.getQueryPort()));
         try {
+            if (query == null) {
+                try {
+                    query = new MCQuery(selectedServer.getQueryHost(), Integer.valueOf(selectedServer.getQueryPort()));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
             return query.fullStat();
         } catch (Exception e) {
             e.printStackTrace();
@@ -37,7 +48,8 @@ public class LoadPluginsTask extends AsyncTask<Void, Void, QueryResponse> {
 
     @Override
     protected void onPostExecute(QueryResponse response) {
-        ServerControlPluginsFragment fragment = (ServerControlPluginsFragment)context;
+        Log.i("LoadPluginsTask", "end - " + selectedServer.getQueryHost() + Integer.valueOf(selectedServer.getQueryPort()));
+        ServerControlPluginsFragment fragment = (ServerControlPluginsFragment) context;
         fragment.getPlugins().clear();
         for (String plugin : response.getPlugins()) {
             for (String supportedPlugin : CommandProvider.supportedPluginNames) {
