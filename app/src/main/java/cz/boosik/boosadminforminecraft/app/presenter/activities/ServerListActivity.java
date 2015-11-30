@@ -62,6 +62,9 @@ public class ServerListActivity extends AppCompatActivity {
             case "delete":
                 string = getString(R.string.server_list_hint);
                 break;
+            case "network":
+                string = getString(R.string.network_error);
+                break;
         }
 
         if (string != null) {

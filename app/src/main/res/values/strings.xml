@@ -10,6 +10,7 @@
     <string name="no_servers_added">No servers have been added. Please use floating action button to add a server.</string>
     <string name="rcon_error">Error: cannot connect to RCON, is the server online?</string>
     <string name="query_error">Error: cannot connect to Query, is the server online?</string>
+    <string name="network_error">Error: internet connection is not available!</string>
     <string name="delete_entry">Delete server</string>
     <string name="delete_entry_msg">Are you sure you want to delete this server?</string>
 

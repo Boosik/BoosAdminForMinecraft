@@ -47,7 +47,7 @@ public class CheckRconTask extends AsyncTask<Void, Void, String> {
     protected void onPostExecute(String result) {
         ServerListActivity activity = (ServerListActivity) context;
         if (result == null) {
-            activity.invokeError("query");
+            activity.invokeError("rcon");
             return;
         }
         System.out.println("CheckRcon");

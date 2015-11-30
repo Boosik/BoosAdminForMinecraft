@@ -3,8 +3,10 @@ package cz.boosik.boosadminforminecraft.app.model.tasks;
 import android.content.Context;
 import android.os.AsyncTask;
 import cz.boosik.boosadminforminecraft.app.presenter.activities.ServerListActivity;
+import query.MCQuery;
 import query.QueryResponse;
 
+import static cz.boosik.boosadminforminecraft.app.presenter.fragments.AbstractServerFragment.selectedServer;
 import static cz.boosik.boosadminforminecraft.app.presenter.activities.ServerListActivity.query;
 
 /**
@@ -26,6 +28,13 @@ public class CheckQueryTask extends AsyncTask<Void, Void, QueryResponse> {
     @Override
     protected QueryResponse doInBackground(Void... params) {
         try {
+            if (query == null) {
+                try {
+                    query = new MCQuery(selectedServer.getQueryHost(), Integer.valueOf(selectedServer.getQueryPort()));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
             return query.fullStat();
         } catch (Exception e) {
             e.printStackTrace();

@@ -12,11 +12,11 @@ import android.widget.TextView;
 import butterknife.*;
 import com.melnykov.fab.FloatingActionButton;
 import cz.boosik.boosadminforminecraft.app.R;
-import cz.boosik.boosadminforminecraft.app.presenter.activities.ServerAddActivity;
-import cz.boosik.boosadminforminecraft.app.presenter.activities.ServerListActivity;
 import cz.boosik.boosadminforminecraft.app.model.servers.Server;
 import cz.boosik.boosadminforminecraft.app.model.servers.ServerProvider;
 import cz.boosik.boosadminforminecraft.app.model.servers.ServerStorage;
+import cz.boosik.boosadminforminecraft.app.presenter.activities.ServerAddActivity;
+import cz.boosik.boosadminforminecraft.app.presenter.activities.ServerListActivity;
 import cz.boosik.boosadminforminecraft.app.view.adapters.CardArrayServerAdapter;
 import query.MCQuery;
 
@@ -62,6 +62,7 @@ public class ServerListFragment extends AbstractServerFragment {
     @OnItemClick(R.id.server_list)
     public void onItemClick(int position) {
         selectedServer = (Server) lv.getItemAtPosition(position);
+        query = null;
         try {
             query = new MCQuery(selectedServer.getQueryHost(), Integer.valueOf(selectedServer.getQueryPort()));
         } catch (Exception e) {
